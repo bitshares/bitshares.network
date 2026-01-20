@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitShares Blockchain Explorer</title>
+    <link rel="icon" type="image/png" href="https://bitshares.github.io/docs/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #001530;
+            color: #eee;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid #001530;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            color: #ffffff;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: #001C3F;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .status-indicator:hover {
+            background: #002a55;
+        }
+
+        .node-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #001C3F;
+            border: 1px solid #001530;
+            border-radius: 8px;
+            margin-top: 5px;
+            max-height: 500px;
+            min-width: 500px;
+            width: auto;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .node-dropdown.show {
+            display: block;
+        }
+
+        .node-group {
+            padding: 12px 15px;
+            border-bottom: 1px solid #001530;
+        }
+
+        .node-group:last-child {
+            border-bottom: none;
+        }
+
+        .node-group-title {
+            font-size: 12px;
+            color: #3EAFFF;
+            margin-bottom: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .node-item {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .node-item:hover {
+            background: #001530;
+        }
+
+        .node-item.active {
+            background: #002a55;
+            border-left: 3px solid #00ff88;
+        }
+
+        .node-url {
+            font-size: 14px;
+            color: #eee;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .node-details {
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+            line-height: 1.5;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #666;
+            transition: background 0.3s;
+        }
+
+        .status-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .status-dot.connecting {
+            background: #ffaa00;
+            animation: pulse 1s infinite;
+        }
+
+        .status-dot.error {
+            background: #ff4444;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .search-section {
+            background: #001C3F;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .search-section h2 {
+            margin-bottom: 15px;
+            color: #3EAFFF;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            font-size: 16px;
+            border: 2px solid #001530;
+            border-radius: 8px;
+            background: #001530;
+            color: #eee;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #3EAFFF;
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #3EAFFF;
+            color: #001530;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #00b8e6;
+            transform: translateY(-2px);
+        }
+
+        .search-hints {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .search-hints span {
+            margin-right: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .panel {
+            background: #001C3F;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #001530;
+            border-bottom: 1px solid #001530;
+        }
+
+        .panel-header h2 {
+            font-size: 18px;
+            color: #3EAFFF;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .control-btn.primary {
+            background: #3EAFFF;
+            color: #001530;
+        }
+
+        .control-btn.secondary {
+            background: #001530;
+            color: #eee;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .panel-content {
+            padding: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .panel-content::-webkit-scrollbar-track {
+            background: #001530;
+        }
+
+        .panel-content::-webkit-scrollbar-thumb {
+            background: #001530;
+            border-radius: 4px;
+        }
+
+        .block-card {
+            background: #001530;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3EAFFF;
+            transition: transform 0.3s;
+        }
+
+        .block-card:hover {
+            transform: translateX(5px);
+        }
+
+        .block-card.new {
+            animation: highlight 2s ease-out;
+        }
+
+        @keyframes highlight {
+            0% { background: #2a4a3a; }
+            100% { background: #001530; }
+        }
+
+        .block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .block-height {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3EAFFF;
+        }
+
+        .block-timestamp {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .block-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .detail-item {
+            padding: 10px;
+            background: #001C3F;
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: #eee;
+            word-break: break-all;
+        }
+
+        .transactions {
+            margin-top: 15px;
+        }
+
+        .transactions h4 {
+            margin-bottom: 10px;
+            color: #3EAFFF;
+        }
+
+        .transaction {
+            background: #001C3F;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .transaction-preview {
+            color: #00ff88;
+        }
+
+        .no-blocks {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .search-results {
+            padding: 20px;
+        }
+
+        .result-card {
+            background: #001530;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #00ff88;
+        }
+
+        .result-card.error {
+            border-left-color: #ff4444;
+            background: #3a1a1a;
+        }
+
+        .result-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #3EAFFF;
+            color: #001530;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .result-id {
+            font-family: 'Courier New', monospace;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .result-content {
+            color: #eee;
+            line-height: 1.6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #001530;
+            border-top-color: #3EAFFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #001C3F;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-card:first-child .stat-value {
+            font-size: 36px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3EAFFF;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .error-message {
+            background: #3a1a1a;
+            border: 1px solid #ff4444;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            color: #ff4444;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                    <image href="https://bitshares.github.io/docs/images/logo.png" width="60" height="60" preserveAspectRatio="xMidYMid meet"/>
+                </svg>
+                <h1>BitShares Explorer</h1>
+            </div>
+            <div class="status-indicator" id="statusIndicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Disconnected</span>
+                <div class="node-dropdown" id="nodeDropdown"></div>
+            </div>
+        </header>
+
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="currentBlock">-</div>
+                <div class="stat-label">Current Block</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="blockCount">0</div>
+                <div class="stat-label">Blocks Received</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="txCount">0</div>
+                <div class="stat-label">Transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="connectionTime">0s</div>
+                <div class="stat-label">Connection Time</div>
+            </div>
+        </div>
+
+        <div class="search-section">
+            <h2>Search</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or object ID (e.g., 12345, bitsharesdex, 1.2.123)">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+            <div class="search-hints">
+                <span><strong>Blocks:</strong> Enter block number (e.g., 12345)</span>
+                <span><strong>Accounts:</strong> Enter username (e.g., bitsharesdex)</span>
+                <span><strong>Objects:</strong> Enter object ID (e.g., 1.2.123 or hex)</span>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Live Blocks</h2>
+                    <div class="controls">
+                        <button class="control-btn primary" id="pauseBtn">Pause</button>
+                        <button class="control-btn secondary" id="clearBtn">Clear</button>
+                    </div>
+                </div>
+                <div class="panel-content" id="blocksContainer">
+                    <div class="no-blocks">
+                        <p>Waiting for blocks...</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Connect to see real-time block data</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Search Results</h2>
+                    <button class="control-btn secondary" id="clearResultsBtn">Clear Results</button>
+                </div>
+                <div class="panel-content" id="resultsContainer">
+                    <div class="no-blocks">
+                        <p>Search for blocks, accounts, or objects</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://bitshares.network/btsdex.min.js"></script>
+    <script>
+        const App = {
+            ws: null,
+            isPaused: false,
+            blocks: [],
+            blockCount: 0,
+            txCount: 0,
+            connectionStartTime: null,
+            pollInterval: null,
+            headBlockPollInterval: null,
+            connectionTimeout: null,
+            connectionTimeInterval: null,
+            currentHeadBlockNum: null,
+            currentNode: 'wss://dex.iobanker.com/ws',
+            nodes: [
+                {
+                    name: 'Livenet',
+                    nodes: [
+                        {
+                            url: "ws://127.0.0.1:8090",
+                            location: "Locally hosted"
+                        },
+                        {
+                            url: "wss://dex.iobanker.com/ws",
+                            region: "Western Europe",
+                            country: "Germany",
+                            location: "Frankfurt",
+                            operator: "Witness: iobanker-core",
+                            contact: "email:admin@iobanker.com"
+                        },
+                        {
+                            url: "wss://api.bitshares.dev/ws",
+                            region: "Northern America",
+                            country: "U.S.A.",
+                            location: "Virginia",
+                            operator: "Witness: in.abit",
+                            contact: "telegram:abitmore"
+                        },
+                        {
+                            url: "wss://btsws.roelandp.nl/ws",
+                            region: "Northern Europe",
+                            country: "Finland",
+                            location: "Helsinki",
+                            operator: "Witness: roelandp",
+                            contact: "telegram:roelandp"
+                        },
+                        {
+                            url: "wss://api.dex.trading/",
+                            region: "Western Europe",
+                            country: "France",
+                            location: "Paris",
+                            operator: "Witness: zapata42-witness",
+                            contact: "telegram:Zapata_42"
+                        },
+                        {
+                            url: "wss://public.xbts.io/ws",
+                            region: "Western Europe",
+                            country: "Germany",
+                            location: "Nuremberg",
+                            operator: "Witness: xbtsio-wallet",
+                            contact: "telegram: xbtsio"
+                        },
+                        {
+                            url: "wss://cloud.xbts.io/ws",
+                            region: "Northern America",
+                            country: "U.S.A.",
+                            location: "VG, Ashburn",
+                            operator: "Witness: xbtsio-wallet",
+                            contact: "telegram: xbtsio"
+                        },
+                        {
+                            url: "wss://node.xbts.io/ws",
+                            region: "Western Europe",
+                            country: "Germany",
+                            location: "Falkenstein",
+                            operator: "Witness: xbtsio-wallet",
+                            contact: "telegram: xbtsio"
+                        },
+                        {
+                            url: "wss://api.btslebin.com/ws",
+                            region: "Eastern Asia",
+                            country: "China",
+                            location: "Hong Kong",
+                            operator: "Witness: lebin-witness",
+                            contact: "telegram: lebinbit"
+                        },
+                        {
+                            url: "wss://bitsharesapi.loclx.io",
+                            region: "North America",
+                            country: "United States",
+                            location: "Chicago",
+                            operator: "bitshares.info",
+                            contact: "telegram:brekyrself"
+                        }
+                    ]
+                },
+                {
+                    name: 'Testnet',
+                    nodes: [
+                        {
+                            url: "wss://testnet.dex.trading/",
+                            region: "TESTNET - Western Europe",
+                            country: "France",
+                            location: "Paris",
+                            operator: "Witness: zapata42-witness",
+                            contact: "telegram:Zapata_42"
+                        },
+                        {
+                            url: "wss://testnet.xbts.io/ws",
+                            region: "TESTNET - Europe",
+                            country: "Germany",
+                            location: "Nuremberg",
+                            operator: "Witness: xbtsio-wallet",
+                            contact: "telegram: xbtsio"
+                        },
+                        {
+                            url: "wss://bitsharestestnet.loclx.io",
+                            region: "Northern America",
+                            country: "USA",
+                            location: "Chicago",
+                            operator: "bitshares.info",
+                            contact: "telegram:brekyrself"
+                        }
+                    ]
+                }
+            ],
+
+            elements: {
+                statusDot: document.getElementById('statusDot'),
+                statusText: document.getElementById('statusText'),
+                blocksContainer: document.getElementById('blocksContainer'),
+                resultsContainer: document.getElementById('resultsContainer'),
+                currentBlock: document.getElementById('currentBlock'),
+                blockCount: document.getElementById('blockCount'),
+                txCount: document.getElementById('txCount'),
+                connectionTime: document.getElementById('connectionTime'),
+                searchInput: document.getElementById('searchInput'),
+                searchBtn: document.getElementById('searchBtn'),
+                pauseBtn: document.getElementById('pauseBtn'),
+                clearBtn: document.getElementById('clearBtn'),
+                clearResultsBtn: document.getElementById('clearResultsBtn'),
+                statusIndicator: document.getElementById('statusIndicator'),
+                nodeDropdown: document.getElementById('nodeDropdown')
+            },
+
+            init() {
+                const preferredNode = sessionStorage.getItem('preferredNode');
+                if (preferredNode) {
+                    this.currentNode = preferredNode;
+                    sessionStorage.removeItem('preferredNode');
+                    console.log('Using preferred node:', this.currentNode);
+                }
+                
+                this.renderNodeDropdown();
+                this.bindEvents();
+                this.connect();
+            },
+
+            renderNodeDropdown() {
+                let html = '';
+                for (const group of this.nodes) {
+                    html += `<div class="node-group"><div class="node-group-title">${group.name}</div>`;
+                    for (const node of group.nodes) {
+                        const isActive = node.url === this.currentNode ? 'active' : '';
+                        const details = [node.region, node.country, node.location, node.operator, node.contact].filter(Boolean).join(' | ');
+                        html += `
+                            <div class="node-item ${isActive}" data-url="${node.url}" onclick="App.switchNode('${node.url}')">
+                                <div class="node-url">${node.url}</div>
+                                <div class="node-details">${details || node.location || ''}</div>
+                            </div>
+                        `;
+                    }
+                    html += '</div>';
+                }
+                this.elements.nodeDropdown.innerHTML = html;
+            },
+
+            toggleNodeDropdown() {
+                this.elements.nodeDropdown.classList.toggle('show');
+            },
+
+            hideNodeDropdown() {
+                this.elements.nodeDropdown.classList.remove('show');
+            },
+
+            async switchNode(url) {
+                if (url === this.currentNode) {
+                    this.hideNodeDropdown();
+                    return;
+                }
+
+                this.hideNodeDropdown();
+
+                console.log('=== NODE SWITCH START ===');
+                console.log('From:', this.currentNode, 'to:', url);
+                this.setStatus('connecting');
+                this.elements.statusText.textContent = 'Switching node...';
+
+                try {
+                    console.log('Disconnecting from current node...');
+                    await BitShares.disconnect();
+                    
+                    console.log('Clearing state...');
+                    BitShares.connectPromise = undefined;
+                    BitShares.chain = undefined;
+                    BitShares.autoreconnect = false;
+                    
+                    this.currentNode = url;
+                    this.renderNodeDropdown();
+                    
+                    console.log('Page reload required for clean node switch...');
+                    this.elements.blocksContainer.innerHTML = `
+                        <div class="no-blocks">
+                            <p>Reloading to connect to ${url}...</p>
+                        </div>
+                    `;
+                    
+                    setTimeout(() => {
+                        sessionStorage.setItem('preferredNode', url);
+                        window.location.reload();
+                    }, 1000);
+                    
+                } catch (err) {
+                    console.error('Switch node error:', err);
+                    this.setStatus('error');
+                    this.elements.statusText.textContent = 'Connection Failed';
+                }
+            },
+
+            bindEvents() {
+                this.elements.searchBtn.addEventListener('click', () => this.handleSearch());
+                this.elements.searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleSearch();
+                });
+                this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
+                this.elements.clearBtn.addEventListener('click', () => this.clearBlocks());
+                this.elements.clearResultsBtn.addEventListener('click', () => this.clearResults());
+                this.elements.statusIndicator.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleNodeDropdown();
+                });
+                document.addEventListener('click', () => this.hideNodeDropdown());
+                this.elements.nodeDropdown.addEventListener('click', (e) => e.stopPropagation());
+            },
+
+            setStatus(status) {
+                this.elements.statusDot.className = 'status-dot';
+                switch(status) {
+                    case 'connecting':
+                        this.elements.statusDot.classList.add('connecting');
+                        this.elements.statusText.textContent = 'Connecting...';
+                        break;
+                    case 'connected':
+                        this.elements.statusDot.classList.add('connected');
+                        this.elements.statusText.textContent = 'Connected';
+                        break;
+                    case 'error':
+                        this.elements.statusDot.classList.add('error');
+                        this.elements.statusText.textContent = 'Error';
+                        break;
+                }
+            },
+
+            connect() {
+                this.setStatus('connecting');
+                this.elements.statusText.textContent = 'Connecting...';
+
+                this.connectionTimeout = setTimeout(() => {
+                    if (this.elements.statusText.textContent === 'Connecting...') {
+                        this.setStatus('error');
+                        this.elements.statusText.textContent = 'Connection Timeout';
+                        this.startPolling();
+                    }
+                }, 10000);
+
+                try {
+                    console.log('Connecting to node:', this.currentNode);
+                    BitShares.connect(this.currentNode).then(() => {
+                        console.log('Connected successfully');
+                        clearTimeout(this.connectionTimeout);
+                        this.setStatus('connected');
+                        this.connectionStartTime = Date.now();
+                        this.updateConnectionTime();
+                        this.connectionTimeInterval = setInterval(() => this.updateConnectionTime(), 1000);
+                        this.subscribeToBlocks();
+                        this.startHeadBlockPolling();
+                    }).catch(err => {
+                        clearTimeout(this.connectionTimeout);
+                        console.error('Connection error:', err);
+                        this.setStatus('error');
+                        this.elements.statusText.textContent = 'Connection Failed';
+                        this.startPolling();
+                    });
+                } catch (err) {
+                    clearTimeout(this.connectionTimeout);
+                    console.error('Connection error:', err);
+                    this.setStatus('error');
+                    this.startPolling();
+                }
+            },
+
+            startHeadBlockPolling() {
+                this.updateHeadBlock();
+                this.headBlockPollInterval = setInterval(() => {
+                    if (!this.isPaused) {
+                        this.updateHeadBlock();
+                    }
+                }, 1000);
+            },
+
+            async updateHeadBlock() {
+                try {
+                    if (!BitShares) {
+                        console.log('BitShares not available');
+                        return;
+                    }
+                    
+                    if (!BitShares.db || !BitShares.db.get_objects) {
+                        console.log('BitShares.db.get_objects not available');
+                        return;
+                    }
+                    
+                    console.log('Fetching head block from', this.currentNode);
+                    const dynamicProps = await BitShares.db.get_objects(['2.1.0']);
+                    console.log('get_objects result:', dynamicProps);
+                    
+                    if (dynamicProps && dynamicProps[0] && dynamicProps[0].head_block_number !== undefined) {
+                        const num = parseInt(dynamicProps[0].head_block_number);
+                        this.currentHeadBlockNum = num;
+                        this.elements.currentBlock.textContent = num;
+                        console.log('Updated head block to:', num, 'from node:', this.currentNode);
+                    } else {
+                        console.log('No head_block_number in response');
+                    }
+                } catch (err) {
+                    console.error('Error fetching head block:', err);
+                }
+            },
+
+            subscribeToBlocks() {
+                try {
+                    const subscribeResult = BitShares.subscribe('block', (block) => {
+                        if (!this.isPaused) {
+                            this.handleNewBlock(block);
+                        }
+                    });
+
+                    if (subscribeResult && typeof subscribeResult.then === 'function') {
+                        subscribeResult.then(() => {
+                            console.log('Successfully subscribed to blocks');
+                        }).catch(err => {
+                            console.error('Subscribe error:', err);
+                            this.startPolling();
+                        });
+                    } else if (subscribeResult === undefined) {
+                        console.log('Subscribed to blocks (no Promise returned)');
+                    } else {
+                        console.log('Subscribe returned:', subscribeResult);
+                    }
+                } catch (err) {
+                    console.error('Subscribe error:', err);
+                    this.startPolling();
+                }
+            },
+
+            startPolling() {
+                console.log('Starting polling fallback...');
+                this.pollInterval = setInterval(() => {
+                    if (!this.isPaused) {
+                        this.fetchLatestBlock();
+                    }
+                }, 3000);
+            },
+
+            async fetchLatestBlock() {
+                try {
+                    let objectsResult;
+                    if (BitShares.db && BitShares.db.get_objects) {
+                        objectsResult = await BitShares.db.get_objects(['2.1.0']);
+                    } else if (BitShares.database && BitShares.database.getObjects) {
+                        objectsResult = await BitShares.database.getObjects(['2.1.0']);
+                    } else {
+                        return;
+                    }
+                    
+                    if (objectsResult && objectsResult[0] && objectsResult[0].head_block_number !== undefined) {
+                        const blockNum = objectsResult[0].head_block_number.toString();
+                        let block;
+                        if (BitShares.db && BitShares.db.get_objects) {
+                            block = await BitShares.db.get_objects([blockNum]);
+                        } else if (BitShares.database && BitShares.database.getObjects) {
+                            block = await BitShares.database.getObjects([blockNum]);
+                        }
+                        if (block && block[0]) {
+                            this.handleNewBlock(block[0]);
+                        }
+                    }
+                } catch (err) {
+                    console.error('Polling error:', err);
+                }
+            },
+
+            async handleNewBlock(blockData) {
+                console.log('Block data received:', JSON.stringify(blockData, null, 2));
+
+                const data = Array.isArray(blockData) ? blockData[0] : blockData;
+
+                this.blockCount++;
+                this.elements.blockCount.textContent = this.blockCount;
+
+                let blockNum = this.currentHeadBlockNum;
+
+                if (!blockNum) {
+                    if (data.head_block_number !== undefined) {
+                        blockNum = data.head_block_number;
+                    }
+                    if (!blockNum && data.block_num !== undefined) {
+                        blockNum = data.block_num;
+                    }
+                    if (!blockNum && data.block_number !== undefined) {
+                        blockNum = data.block_number;
+                    }
+                    if (!blockNum && data.height !== undefined) {
+                        blockNum = data.height;
+                    }
+                }
+
+                if (blockNum !== null && blockNum !== undefined) {
+                    this.elements.currentBlock.textContent = blockNum;
+                }
+
+                let witnessId = data.witness_id || data.witness || data.current_witness || data.miner || 'N/A';
+
+                let transactions = [];
+                let operationsList = [];
+
+                try {
+                    const fullBlock = await BitShares.db.get_block(blockNum);
+                    if (fullBlock && fullBlock.transactions) {
+                        for (const tx of fullBlock.transactions) {
+                            const txOps = [];
+                            for (const op of tx.operations) {
+                                const opType = Array.isArray(op) ? op[0] : op;
+                                const opData = Array.isArray(op) ? op[1] : op;
+                                const opName = await this.getOperationName(opType);
+                                txOps.push(opName);
+                            }
+                            transactions.push({
+                                ref: tx.ref_block_num ? `${tx.ref_block_num}.${tx.ref_block_prefix}` : 'N/A',
+                                operations: txOps
+                            });
+                            operationsList.push(...txOps);
+                        }
+                    }
+                    console.log('Operations extracted:', operationsList);
+                } catch (err) {
+                    console.error('Error fetching block operations:', err);
+                }
+
+                this.txCount += transactions.length;
+                this.elements.txCount.textContent = this.txCount;
+
+                const block = {
+                    height: blockNum,
+                    timestamp: data.timestamp || data.time || new Date().toISOString(),
+                    witnessId: witnessId,
+                    transactions: transactions,
+                    operationsList: operationsList,
+                    raw: data
+                };
+
+                this.blocks.unshift(block);
+                if (this.blocks.length > 50) {
+                    this.blocks.pop();
+                }
+
+                this.renderBlock(block, true);
+            },
+
+            async getTransactionDetails(blockData) {
+                const transactions = [];
+                const txns = blockData.transactions || blockData.tx || [];
+
+                for (const tx of txns) {
+                    try {
+                        const operations = tx.operations || [];
+                        const txDetails = [];
+
+                        for (const op of operations) {
+                            const opType = typeof op === 'object' ? op[0] : op;
+                            const opData = typeof op === 'object' ? op[1] : {};
+
+                            const opName = await this.getOperationName(opType);
+                            const preview = await this.getOperationPreview(opType, opData);
+                            txDetails.push({
+                                type: opName,
+                                preview: preview,
+                                raw: op
+                            });
+                        }
+
+                        transactions.push({
+                            ref: tx.ref_block_num ? `${tx.ref_block_num}.${tx.ref_block_prefix}` : 'N/A',
+                            operations: txDetails
+                        });
+                    } catch (err) {
+                        transactions.push({
+                            ref: 'N/A',
+                            operations: [{ type: 'Unknown', preview: 'Unable to parse' }]
+                        });
+                    }
+                }
+
+                return transactions;
+            },
+
+            async getOperationName(opType) {
+                const operationNames = {
+                    0: 'transfer',
+                    1: 'limit_order_create',
+                    2: 'limit_order_cancel',
+                    3: 'call_order_update',
+                    4: 'fill_order',
+                    5: 'account_create',
+                    6: 'account_update',
+                    7: 'account_whitelist',
+                    8: 'account_upgrade',
+                    9: 'account_transfer',
+                    10: 'asset_create',
+                    11: 'asset_update',
+                    12: 'asset_update_bitasset',
+                    13: 'asset_update_feed_producers',
+                    14: 'asset_issue',
+                    15: 'asset_reserve',
+                    16: 'asset_fund_fee_pool',
+                    17: 'asset_settle',
+                    18: 'asset_global_settle',
+                    19: 'asset_publish_feed',
+                    20: 'witness_create',
+                    21: 'witness_update',
+                    22: 'proposal_create',
+                    23: 'proposal_update',
+                    24: 'proposal_delete',
+                    25: 'withdraw_permission_create',
+                    26: 'withdraw_permission_update',
+                    27: 'withdraw_permission_claim',
+                    28: 'withdraw_permission_delete',
+                    29: 'committee_member_create',
+                    30: 'committee_member_update',
+                    31: 'committee_member_update_global_parameters',
+                    32: 'vesting_balance_create',
+                    33: 'vesting_balance_withdraw',
+                    34: 'worker_create',
+                    35: 'custom',
+                    36: 'assert',
+                    37: 'balance_claim',
+                    38: 'override_transfer',
+                    39: 'blind_transfer',
+                    40: 'transfer_to_blind',
+                    41: 'blind_receipt',
+                    42: 'transfer_from_blind',
+                    43: 'asset_settle_cancel',
+                    44: 'asset_claim_fees',
+                    45: 'fba_distribute',
+                    46: 'bid_collateral',
+                    47: 'execute_bid',
+                    48: 'asset_claim_pool',
+                    49: 'asset_update_issuer'
+                };
+
+                return operationNames[opType] || `operation_${opType}`;
+            },
+
+            async getOperationPreview(opType, opData) {
+                switch(opType) {
+                    case 0:
+                        return `transfer {from=${opData.from || 'N/A'}, to=${opData.to || 'N/A'}, amount=${opData.amount ? this.formatAmount(opData.amount) : 'N/A'}}`;
+                    case 1:
+                        return `limit_order_create {amount=${opData.amount ? this.formatAmount(opData.amount) : 'N/A'}, price=${opData.price ? this.formatAmount(opData.price) : 'N/A'}}`;
+                    case 5:
+                        return `account_create {name=${opData.name || 'N/A'}, registrar=${opData.registrar || 'N/A'}}`;
+                    case 6:
+                        return `account_update {account=${opData.account || 'N/A'}}`;
+                    case 10:
+                        return `asset_create {symbol=${opData.symbol || 'N/A'}, issuer=${opData.issuer || 'N/A'}}`;
+                    case 14:
+                        return `asset_issue {asset=${opData.asset || 'N/A'}, to=${opData.issue_to_account || 'N/A'}}`;
+                    case 20:
+                        return `witness_create {account=${opData.witness_account || 'N/A'}}`;
+                    case 21:
+                        return `witness_update {witness=${opData.witness || 'N/A'}}`;
+                    case 22:
+                        return `proposal_create {fee=${opData.fee ? this.formatAmount(opData.fee) : 'N/A'}}`;
+                    default:
+                        return JSON.stringify(opData).substring(0, 100);
+                }
+            },
+
+            formatAmount(amount) {
+                if (!amount) return 'N/A';
+                if (typeof amount === 'object') {
+                    return `${amount.amount / Math.pow(10, amount.precision || 0)} ${amount.asset_id || 'unknown'}`;
+                }
+                return amount.toString();
+            },
+
+            renderBlock(block, isNew = false) {
+                if (this.blocks.length === 1) {
+                    this.elements.blocksContainer.innerHTML = '';
+                }
+
+                let displayHeight = block.height;
+                let displayWitnessId = block.witnessId;
+
+                if (displayHeight === null || displayHeight === undefined) {
+                    if (block.raw) {
+                        if (block.raw.head_block_number !== undefined) {
+                            displayHeight = block.raw.head_block_number;
+                        }
+                    }
+                }
+
+                if ((displayWitnessId === null || displayWitnessId === undefined || displayWitnessId === 'N/A') && block.raw) {
+                    const raw = block.raw;
+                    displayWitnessId = raw.witness_id || raw.witness || raw.current_witness || raw.miner || 'N/A';
+                }
+
+                const operationsDisplay = block.operationsList && block.operationsList.length > 0
+                    ? block.operationsList.join(', ')
+                    : 'No operations';
+
+                const txHtml = block.transactions.map(tx => {
+                    const opsHtml = tx.operations.map(op =>
+                        `<div class="transaction"><span class="transaction-preview">${op}</span></div>`
+                    ).join('');
+                    return `<div class="transaction">Ref: ${tx.ref}</div>${opsHtml}`;
+                }).join('');
+
+                const blockHtml = `
+                    <div class="block-card ${isNew ? 'new' : ''}">
+                        <div class="block-header">
+                            <span class="block-height">Block #${displayHeight !== null && displayHeight !== undefined ? displayHeight : 'N/A'}</span>
+                            <span class="block-timestamp">${this.formatTimestamp(block.timestamp)}</span>
+                        </div>
+                        <div class="block-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Witness ID</div>
+                                <div class="detail-value">${displayWitnessId || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Operations</div>
+                                <div class="detail-value">${operationsDisplay}</div>
+                            </div>
+                        </div>
+                        ${block.transactions.length > 0 ? `
+                            <div class="transactions">
+                                <h4>Transactions (${block.transactions.length})</h4>
+                                ${txHtml}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                this.elements.blocksContainer.insertAdjacentHTML('afterbegin', blockHtml);
+            },
+
+            formatTimestamp(timestamp) {
+                if (!timestamp) return 'N/A';
+                try {
+                    const date = new Date(timestamp);
+                    return date.toLocaleString();
+                } catch {
+                    return timestamp;
+                }
+            },
+
+            updateConnectionTime() {
+                if (this.connectionStartTime) {
+                    const seconds = Math.floor((Date.now() - this.connectionStartTime) / 1000);
+                    const mins = Math.floor(seconds / 60);
+                    const secs = seconds % 60;
+                    this.elements.connectionTime.textContent = `${mins}m ${secs}s`;
+                }
+            },
+
+            togglePause() {
+                this.isPaused = !this.isPaused;
+                this.elements.pauseBtn.textContent = this.isPaused ? 'Resume' : 'Pause';
+                this.elements.pauseBtn.className = `control-btn ${this.isPaused ? 'secondary' : 'primary'}`;
+            },
+
+            clearBlocks() {
+                this.blocks = [];
+                this.blockCount = 0;
+                this.txCount = 0;
+                this.elements.blockCount.textContent = '0';
+                this.elements.txCount.textContent = '0';
+                this.elements.blocksContainer.innerHTML = `
+                    <div class="no-blocks">
+                        <p>Waiting for blocks...</p>
+                        <p style="font-size: 14px; margin-top: 10px;">Connect to see real-time block data</p>
+                    </div>
+                `;
+            },
+
+            clearResults() {
+                this.elements.resultsContainer.innerHTML = `
+                    <div class="no-blocks">
+                        <p>Search for blocks, accounts, or objects</p>
+                    </div>
+                `;
+            },
+
+            async handleSearch() {
+                const query = this.elements.searchInput.value.trim();
+                if (!query) return;
+
+                this.elements.resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
+
+                try {
+                    let result = null;
+                    let resultType = '';
+
+                    if (!isNaN(query)) {
+                        resultType = 'Block';
+                        result = await BitShares.db.get_block(query);
+                    } else if (/^1\.2\.\d+$/.test(query) || /^1\.\d+\.\d+$/.test(query) || /^0x[0-9a-fA-F]+$/.test(query)) {
+                        resultType = 'Object';
+                        result = await BitShares.db.get_objects([query]);
+                    } else {
+                        resultType = 'Account';
+                        result = await BitShares.accounts[query];
+                    }
+
+                    this.renderSearchResult(result, resultType, query);
+                } catch (err) {
+                    console.error('Search error:', err);
+                    this.renderSearchResult(null, 'Error', query);
+                }
+            },
+
+            renderSearchResult(data, resultType, query) {
+                if (!data) {
+                    this.elements.resultsContainer.innerHTML = `
+                        <div class="result-card error">
+                            <span class="result-type">${resultType}</span>
+                            <div class="result-id">${query}</div>
+                            <div class="result-content">No results found for "${query}"</div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let displayData = data;
+                if (Array.isArray(data) && data[0]) {
+                    displayData = data[0];
+                }
+
+                const contentHtml = `<pre style="white-space: pre-wrap; word-wrap: break-word;">${JSON.stringify(displayData, null, 2)}</pre>`;
+
+                let title = query;
+                if (resultType === 'Block') title = `Block #${query}`;
+                if (resultType === 'Account') title = `Account: ${query}`;
+
+                this.elements.resultsContainer.innerHTML = `
+                    <div class="result-card">
+                        <span class="result-type">${resultType}</span>
+                        <div class="result-id">${title}</div>
+                        <div class="result-content">${contentHtml}</div>
+                    </div>
+                `;
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            App.init();
+        });
+    </script>
+</body>
+</html>
