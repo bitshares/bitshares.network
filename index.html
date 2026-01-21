@@ -218,6 +218,210 @@
             margin-right: 20px;
         }
 
+        .account-search-section {
+        }
+
+        .account-history-container {
+            margin-bottom: 20px;
+        }
+
+        .account-history-container .panel {
+            min-height: 400px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 17px;
+            table-layout: fixed;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #001530;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-table th {
+            background: #001530;
+            color: #3EAFFF;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid #3EAFFF;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .history-table thead th:nth-child(1) { width: 20%; }
+        .history-table thead th:nth-child(2) { width: 30%; }
+        .history-table thead th:nth-child(3) { width: 10%; }
+        .history-table thead th:nth-child(4) { width: 20%; }
+        .history-table thead th:nth-child(5) { width: 20%; }
+
+        .history-table tbody td:nth-child(1) { width: 20%; }
+        .history-table tbody td:nth-child(2) { width: 30%; }
+        .history-table tbody td:nth-child(3) { width: 10%; }
+        .history-table tbody td:nth-child(4) { width: 20%; }
+        .history-table tbody td:nth-child(5) { width: 20%; }
+
+        .history-table tr:hover {
+            background: #002040;
+        }
+
+        .history-table .operation-cell {
+            font-weight: bold;
+            color: #3EAFFF;
+        }
+
+        .history-table .amount-cell {
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+        }
+
+        .history-table .from-to-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .history-table .block-cell {
+            color: #888;
+            font-size: 15px;
+        }
+
+        .history-table .time-cell {
+            color: #888;
+            font-size: 15px;
+            white-space: nowrap;
+        }
+
+        .history-table .tx-id-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #00ff88;
+        }
+
+        .history-table .tx-id-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            color: #00ff88;
+        }
+
+        .history-table .account-name {
+            color: #3EAFFF;
+            font-weight: bold;
+        }
+
+        .history-table .account-id {
+            color: #aaa;
+        }
+
+        .history-table .account-ref {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .history-table .asset-symbol {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .history-table .asset-id {
+            color: #888;
+        }
+
+        .history-table .amount-cell {
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+            font-size: 15px;
+        }
+
+        .history-row-virtual {
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .history-row-account_update {
+            border-left: 3px solid #3EAFFF;
+        }
+
+        .history-row-account_create {
+            border-left: 3px solid #ffaa00;
+        }
+
+        .history-empty {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+        }
+
+        .history-loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .account-info-card {
+            background: #001530;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3EAFFF;
+        }
+
+        .account-info-card h3 {
+            color: #3EAFFF;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .account-info-card .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #001C3F;
+        }
+
+        .account-info-card .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .account-info-card .info-label {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .account-info-card .info-value {
+            color: #eee;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        #accountHistoryContent {
+            padding-top: 0;
+        }
+
+        #accountHistoryContent .account-info-card:first-child {
+            margin-top: 0;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+
+        #accountHistoryContent .history-table {
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            margin-right: -20px;
+        }
+
+        .history-count {
+            font-size: 12px;
+            color: #888;
+            margin-top: 0;
+        }
+
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -565,6 +769,35 @@
                 font-size: 14px;
             }
 
+            .account-search-section {
+                padding: 15px;
+            }
+
+            .account-search-section h2 {
+                font-size: 18px;
+            }
+
+            .account-history-container {
+                margin-bottom: 15px;
+            }
+
+            .account-history-container .panel {
+                min-height: 350px;
+            }
+
+            .history-table {
+                font-size: 14px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 10px 8px;
+            }
+
+            .history-table .tx-id-cell {
+                font-size: 10px;
+            }
+
             .search-btn {
                 padding: 12px 20px;
                 width: 100%;
@@ -753,6 +986,27 @@
                 padding: 14px 25px;
             }
 
+            .account-search-section {
+                padding: 18px;
+            }
+
+            .account-history-container .panel {
+                min-height: 450px;
+            }
+
+            .history-table {
+                font-size: 15px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 12px 10px;
+            }
+
+            .history-table .tx-id-cell {
+                font-size: 10px;
+            }
+
             .main-content {
                 grid-template-columns: 1fr;
                 gap: 18px;
@@ -880,6 +1134,44 @@
                 font-size: 10px;
                 flex-direction: column;
                 gap: 5px;
+            }
+
+            .account-search-section {
+                padding: 12px;
+            }
+
+            .account-search-section h2 {
+                font-size: 16px;
+            }
+
+            .account-history-container .panel {
+                min-height: 300px;
+            }
+
+            .history-table {
+                font-size: 13px;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 8px 6px;
+            }
+
+            .history-table .tx-id-cell {
+                font-size: 9px;
+            }
+
+            .account-info-card {
+                padding: 12px;
+            }
+
+            .account-info-card h3 {
+                font-size: 14px;
+            }
+
+            .account-info-card .info-row {
+                flex-direction: column;
+                gap: 3px;
             }
 
             .main-content {
@@ -1083,8 +1375,36 @@
             </div>
         </div>
 
+        <div class="search-section account-search-section">
+            <h2>Account Statement Search</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="accountSearchInput" placeholder="Enter username (e.g., bitsharesdex)">
+                <button class="search-btn" id="accountSearchBtn">Search History</button>
+            </div>
+            <div class="search-hints">
+                <span><strong>Search:</strong> Enter BitShares account username</span>
+                <span><strong>Limit:</strong> Last 100 transactions</span>
+            </div>
+        </div>
+
+        <div class="account-history-container" id="accountHistoryContainer" style="display: none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Account History</h2>
+                    <div class="controls">
+                        <button class="control-btn secondary" id="clearAccountHistoryBtn">Clear</button>
+                    </div>
+                </div>
+                <div class="panel-content" id="accountHistoryContent">
+                    <div class="no-blocks">
+                        <p>Account history will appear here</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="search-section">
-            <h2>Search</h2>
+            <h2>Advance Search</h2>
             <div class="search-container">
                 <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or object ID (e.g., 12345, bitsharesdex, 1.2.123)">
                 <button class="search-btn" id="searchBtn">Search</button>
@@ -1142,6 +1462,8 @@
             connectionTimeInterval: null,
             currentHeadBlockNum: null,
             currentNode: 'wss://dex.iobanker.com/ws',
+            accountNameCache: {},
+            assetSymbolCache: {},
             nodes: [
                 {
                     name: 'Livenet',
@@ -1270,7 +1592,12 @@
                 clearBtn: document.getElementById('clearBtn'),
                 clearResultsBtn: document.getElementById('clearResultsBtn'),
                 statusIndicator: document.getElementById('statusIndicator'),
-                nodeDropdown: document.getElementById('nodeDropdown')
+                nodeDropdown: document.getElementById('nodeDropdown'),
+                accountSearchInput: document.getElementById('accountSearchInput'),
+                accountSearchBtn: document.getElementById('accountSearchBtn'),
+                accountHistoryContainer: document.getElementById('accountHistoryContainer'),
+                accountHistoryContent: document.getElementById('accountHistoryContent'),
+                clearAccountHistoryBtn: document.getElementById('clearAccountHistoryBtn')
             },
 
             init() {
@@ -1371,6 +1698,11 @@
                 });
                 document.addEventListener('click', () => this.hideNodeDropdown());
                 this.elements.nodeDropdown.addEventListener('click', (e) => e.stopPropagation());
+                this.elements.accountSearchBtn.addEventListener('click', () => this.handleAccountHistorySearch());
+                this.elements.accountSearchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.handleAccountHistorySearch();
+                });
+                this.elements.clearAccountHistoryBtn.addEventListener('click', () => this.clearAccountHistory());
             },
 
             setStatus(status) {
@@ -1583,6 +1915,7 @@
                         }
                     }
                     console.log('Operations extracted:', operationsList);
+                    this.cacheBlockAssets(fullBlock);
                 } catch (err) {
                     console.error('Error fetching block operations:', err);
                 }
@@ -1702,11 +2035,36 @@
             },
 
             async getOperationPreview(opType, opData) {
+                const getAssetDisplay = (id) => {
+                    if (!id) return id;
+                    if (this.assetSymbolCache[id]) {
+                        return `<span class="asset-symbol" title="${id}">${this.assetSymbolCache[id].symbol}</span>`;
+                    }
+                    return `<span class="asset-id">${id}</span>`;
+                };
+
+                const getAssetPrecision = (id) => {
+                    if (!id) return 0;
+                    if (this.assetSymbolCache[id]) {
+                        return this.assetSymbolCache[id].precision;
+                    }
+                    return 0;
+                };
+
+                const formatAmount = (amountObj) => {
+                    if (!amountObj) return 'N/A';
+                    const assetId = amountObj.asset_id;
+                    const symbol = getAssetDisplay(assetId);
+                    const precision = getAssetPrecision(assetId);
+                    const value = amountObj.amount / Math.pow(10, precision);
+                    return `${value.toLocaleString()} ${symbol}`;
+                };
+
                 switch(opType) {
                     case 0:
-                        return `transfer {from=${opData.from || 'N/A'}, to=${opData.to || 'N/A'}, amount=${opData.amount ? this.formatAmount(opData.amount) : 'N/A'}}`;
+                        return `transfer {from=${opData.from || 'N/A'}, to=${opData.to || 'N/A'}, amount=${formatAmount(opData.amount)}}`;
                     case 1:
-                        return `limit_order_create {amount=${opData.amount ? this.formatAmount(opData.amount) : 'N/A'}, price=${opData.price ? this.formatAmount(opData.price) : 'N/A'}}`;
+                        return `limit_order_create {amount=${formatAmount(opData.amount)}, price=${formatAmount(opData.price)}}`;
                     case 5:
                         return `account_create {name=${opData.name || 'N/A'}, registrar=${opData.registrar || 'N/A'}}`;
                     case 6:
@@ -1720,7 +2078,7 @@
                     case 21:
                         return `witness_update {witness=${opData.witness || 'N/A'}}`;
                     case 22:
-                        return `proposal_create {fee=${opData.fee ? this.formatAmount(opData.fee) : 'N/A'}}`;
+                        return `proposal_create {fee=${formatAmount(opData.fee)}}`;
                     default:
                         return JSON.stringify(opData).substring(0, 100);
                 }
@@ -1794,6 +2152,40 @@
                 this.elements.blocksContainer.insertAdjacentHTML('afterbegin', blockHtml);
             },
 
+            async cacheBlockAssets(fullBlock) {
+                if (!fullBlock || !fullBlock.transactions) return;
+
+                const assetIds = new Set();
+                for (const tx of fullBlock.transactions) {
+                    for (const op of tx.operations) {
+                        const opData = Array.isArray(op) ? op[1] : op;
+                        if (opData.fee && opData.fee.asset_id) assetIds.add(opData.fee.asset_id);
+                        if (opData.amount && opData.amount.asset_id) assetIds.add(opData.amount.asset_id);
+                        if (opData.amount_to_sell && opData.amount_to_sell.asset_id) assetIds.add(opData.amount_to_sell.asset_id);
+                        if (opData.min_to_receive && opData.min_to_receive.asset_id) assetIds.add(opData.min_to_receive.asset_id);
+                        if (opData.amount_to_issue && opData.amount_to_issue.asset_id) assetIds.add(opData.amount_to_issue.asset_id);
+                        if (opData.asset_to_issue && opData.asset_to_issue.asset_id) assetIds.add(opData.asset_to_issue.asset_id);
+                    }
+                }
+
+                const assetIdArray = Array.from(assetIds).filter(id => !this.assetSymbolCache[id]);
+                if (assetIdArray.length > 0) {
+                    try {
+                        const assets = await BitShares.db.get_objects(assetIdArray);
+                        for (const asset of assets) {
+                            if (asset && asset.id) {
+                                this.assetSymbolCache[asset.id] = {
+                                    symbol: asset.symbol || asset.id,
+                                    precision: asset.precision !== undefined ? asset.precision : 5
+                                };
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error caching block assets:', err);
+                    }
+                }
+            },
+
             formatTimestamp(timestamp) {
                 if (!timestamp) return 'N/A';
                 try {
@@ -1837,6 +2229,332 @@
                 this.elements.resultsContainer.innerHTML = `
                     <div class="no-blocks">
                         <p>Search for blocks, accounts, or objects</p>
+                    </div>
+                `;
+            },
+
+            async handleAccountHistorySearch() {
+                const username = this.elements.accountSearchInput.value.trim().toLowerCase();
+                if (!username) return;
+
+                this.elements.accountHistoryContainer.style.display = 'block';
+                this.elements.accountHistoryContent.innerHTML = '<div class="history-loading">Searching account...</div>';
+
+                try {
+                    console.log('Searching for account:', username);
+                    
+                    const account = await BitShares.db.getAccountByName(username);
+                    if (!account) {
+                        throw new Error('Account not found');
+                    }
+
+                    console.log('Account found:', account);
+                    const accountId = account.id;
+
+                    this.renderAccountInfo(account);
+
+                    this.elements.accountHistoryContent.innerHTML = '<div class="history-loading">Loading account history...</div>';
+
+                    const history = await BitShares.history.get_account_history(accountId, '1.11.0', 100, '1.11.0');
+                    console.log('History fetched:', history.length, 'records');
+
+                    this.renderAccountHistory(history, accountId);
+                } catch (err) {
+                    console.error('Account history search error:', err);
+                    this.elements.accountHistoryContent.innerHTML = `
+                        <div class="history-empty">
+                            <p style="color: #ff4444;">Error: ${err.message}</p>
+                            <p style="font-size: 12px; margin-top: 10px;">Account "${username}" not found or history unavailable</p>
+                        </div>
+                    `;
+                }
+            },
+
+            renderAccountInfo(account) {
+                const accountInfoHtml = `
+                    <div class="account-info-card">
+                        <h3>Account: ${account.name}</h3>
+                        <div class="info-row">
+                            <span class="info-label">Account ID</span>
+                            <span class="info-value">${account.id}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Registrar</span>
+                            <span class="info-value">${account.registrar || 'N/A'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Membership</span>
+                            <span class="info-value">${account.membership_expiration_date || 'N/A'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Last Active</span>
+                            <span class="info-value">${account.last_balance_update || 'N/A'}</span>
+                        </div>
+                    </div>
+                `;
+                this.elements.accountHistoryContent.innerHTML = accountInfoHtml;
+            },
+
+            async renderAccountHistory(history, accountId) {
+                if (!history || history.length === 0) {
+                    this.elements.accountHistoryContent.innerHTML = `
+                        <div class="history-empty">
+                            <p>No transaction history found for this account</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const operationNames = {
+                    0: 'transfer',
+                    1: 'limit_order_create',
+                    2: 'limit_order_cancel',
+                    3: 'call_order_update',
+                    4: 'fill_order',
+                    5: 'account_create',
+                    6: 'account_update',
+                    7: 'account_whitelist',
+                    8: 'account_upgrade',
+                    9: 'account_transfer',
+                    10: 'asset_create',
+                    11: 'asset_update',
+                    12: 'asset_update_bitasset',
+                    13: 'asset_update_feed_producers',
+                    14: 'asset_issue',
+                    15: 'asset_reserve',
+                    16: 'asset_fund_fee_pool',
+                    17: 'asset_settle',
+                    18: 'asset_global_settle',
+                    19: 'asset_publish_feed',
+                    20: 'witness_create',
+                    21: 'witness_update',
+                    22: 'proposal_create',
+                    23: 'proposal_update',
+                    24: 'proposal_delete',
+                    25: 'withdraw_permission_create',
+                    26: 'withdraw_permission_update',
+                    27: 'withdraw_permission_claim',
+                    28: 'withdraw_permission_delete',
+                    29: 'committee_member_create',
+                    30: 'committee_member_update',
+                    31: 'committee_member_update_global_parameters',
+                    32: 'vesting_balance_create',
+                    33: 'vesting_balance_withdraw',
+                    34: 'worker_create',
+                    35: 'custom',
+                    36: 'assert',
+                    37: 'balance_claim',
+                    38: 'override_transfer',
+                    39: 'blind_transfer',
+                    40: 'transfer_to_blind',
+                    41: 'blind_receipt',
+                    42: 'transfer_from_blind',
+                    43: 'asset_settle_cancel',
+                    44: 'asset_claim_fees',
+                    45: 'fba_distribute',
+                    46: 'bid_collateral',
+                    47: 'execute_bid',
+                    48: 'asset_claim_pool',
+                    49: 'asset_update_issuer'
+                };
+
+                const accountIds = new Set();
+                const assetIds = new Set();
+                for (const record of history) {
+                    const opData = record.op[1];
+                    if (opData.from) accountIds.add(opData.from);
+                    if (opData.to) accountIds.add(opData.to);
+                    if (opData.account) accountIds.add(opData.account);
+                    if (opData.registrar) accountIds.add(opData.registrar);
+                    if (opData.referrer) accountIds.add(opData.referrer);
+                    if (opData.payer) accountIds.add(opData.payer);
+                    if (opData.issuer) accountIds.add(opData.issuer);
+                    if (opData.seller) accountIds.add(opData.seller);
+                    if (opData.fee_paying_account) accountIds.add(opData.fee_paying_account);
+                    if (opData.fee && opData.fee.asset_id) assetIds.add(opData.fee.asset_id);
+                    if (opData.amount && opData.amount.asset_id) assetIds.add(opData.amount.asset_id);
+                    if (opData.amount_to_sell && opData.amount_to_sell.asset_id) assetIds.add(opData.amount_to_sell.asset_id);
+                    if (opData.min_to_receive && opData.min_to_receive.asset_id) assetIds.add(opData.min_to_receive.asset_id);
+                    if (opData.amount_to_issue) assetIds.add(opData.amount_to_issue.asset_id);
+                    if (opData.asset_to_issue) assetIds.add(opData.asset_to_issue.asset_id);
+                }
+
+                console.log('Fetching names for', accountIds.size, 'accounts and', assetIds.size, 'assets');
+
+                const accountIdArray = Array.from(accountIds);
+                if (accountIdArray.length > 0) {
+                    try {
+                        const accounts = await BitShares.db.get_objects(accountIdArray);
+                        for (const account of accounts) {
+                            if (account && account.id) {
+                                this.accountNameCache[account.id] = account.name;
+                            }
+                        }
+                    } catch (err) {
+                        console.error('Error fetching account names:', err);
+                    }
+                }
+
+                const assetIdArray = Array.from(assetIds);
+                if (assetIdArray.length > 0) {
+                    try {
+                        const assets = await BitShares.db.get_objects(assetIdArray);
+                        for (const asset of assets) {
+                            if (asset && asset.id) {
+                                this.assetSymbolCache[asset.id] = {
+                                    symbol: asset.symbol || asset.id,
+                                    precision: asset.precision !== undefined ? asset.precision : 5
+                                };
+                            }
+                        }
+                        console.log('Asset cache:', this.assetSymbolCache);
+                    } catch (err) {
+                        console.error('Error fetching asset symbols:', err);
+                    }
+                }
+
+                const getAccountDisplay = async (id) => {
+                    if (!id) return id;
+                    if (this.accountNameCache[id]) {
+                        return `<span class="account-name" title="${id}">${this.accountNameCache[id]}</span>`;
+                    }
+                    try {
+                        const result = await BitShares.db.get_objects([id]);
+                        if (result && result[0] && result[0].name) {
+                            this.accountNameCache[id] = result[0].name;
+                            return `<span class="account-name" title="${id}">${result[0].name}</span>`;
+                        }
+                    } catch (err) {
+                        console.error('Error fetching account name for', id, ':', err);
+                    }
+                    return `<span class="account-id">${id}</span>`;
+                };
+
+                const getAssetDisplay = (id) => {
+                    if (!id) return id;
+                    if (this.assetSymbolCache[id]) {
+                        return `<span class="asset-symbol" title="${id}">${this.assetSymbolCache[id].symbol}</span>`;
+                    }
+                    return `<span class="asset-id">${id}</span>`;
+                };
+
+                const getAssetPrecision = (id) => {
+                    if (!id) return 0;
+                    if (this.assetSymbolCache[id]) {
+                        return this.assetSymbolCache[id].precision;
+                    }
+                    return 0;
+                };
+
+                const formatAmount = (amountObj) => {
+                    if (!amountObj) return 'N/A';
+                    const assetId = amountObj.asset_id;
+                    const symbol = getAssetDisplay(assetId);
+                    const precision = getAssetPrecision(assetId);
+                    const value = amountObj.amount / Math.pow(10, precision);
+                    return `${value.toLocaleString()} ${symbol}`;
+                };
+
+                let tableHtml = `
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Details</th>
+                                <th>Block</th>
+                                <th>Time</th>
+                                <th>Transaction ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                for (const record of history) {
+                    const opType = record.op[0];
+                    const opData = record.op[1];
+                    const opName = operationNames[opType] || `op_${opType}`;
+                    
+                    let details = '';
+                    let rowClass = '';
+
+                    switch(opType) {
+                        case 0: { // transfer
+                            let from = await getAccountDisplay(opData.from);
+                            let to = await getAccountDisplay(opData.to);
+                            let amount = formatAmount(opData.amount);
+                            details = `<span class="from-to-cell">${from} → ${to}</span><br><span class="amount-cell">${amount}</span>`;
+                            rowClass = 'history-row-transfer';
+                            break;
+                        }
+                        case 5: { // account_create
+                            let registrar = await getAccountDisplay(opData.registrar);
+                            details = `<span class="from-to-cell">Name: ${opData.name || 'N/A'}</span><br><span class="account-ref">Registrar: ${registrar}</span>`;
+                            rowClass = 'history-row-account_create';
+                            break;
+                        }
+                        case 6: { // account_update
+                            let account = await getAccountDisplay(opData.account);
+                            details = `<span class="from-to-cell">Account: ${account}</span>`;
+                            rowClass = 'history-row-account_update';
+                            break;
+                        }
+                        case 1: // limit_order_create
+                        case 2: { // limit_order_cancel
+                            let sellAsset = formatAmount(opData.amount_to_sell);
+                            let receiveAsset = formatAmount(opData.min_to_receive);
+                            details = `<span class="amount-cell">Sell: ${sellAsset}</span><br><span class="amount-cell">Receive: ${receiveAsset}</span>`;
+                            rowClass = 'history-row-transfer';
+                            break;
+                        }
+                        case 14: { // asset_issue
+                            let issuer = await getAccountDisplay(opData.issuer);
+                            let issueTo = await getAccountDisplay(opData.issue_to_account);
+                            let issueAmount = formatAmount(opData.amount_to_issue || opData.asset_to_issue);
+                            details = `<span class="from-to-cell">${issuer} → ${issueTo}</span><br><span class="amount-cell">${issueAmount}</span>`;
+                            rowClass = 'history-row-transfer';
+                            break;
+                        }
+                        case 20: // witness_create
+                        case 21: { // witness_update
+                            let witnessAccount = await getAccountDisplay(opData.witness_account);
+                            details = `<span class="from-to-cell">Account: ${witnessAccount}</span>`;
+                            rowClass = 'history-row-account_update';
+                            break;
+                        }
+                        default: {
+                            details = `<span class="from-to-cell">${opName}</span>`;
+                            break;
+                        }
+                    }
+
+                    const virtualBadge = record.is_virtual ? '<span style="color: #ff4444; font-size: 10px;">(VIRTUAL)</span>' : '';
+
+                    tableHtml += `
+                        <tr class="${rowClass}">
+                            <td class="operation-cell">${opName} ${virtualBadge}</td>
+                            <td>${details}</td>
+                            <td class="block-cell">#${record.block_num}</td>
+                            <td class="time-cell">${record.block_time ? new Date(record.block_time).toLocaleString() : 'N/A'}</td>
+                            <td class="tx-id-cell"><code>${record.id}</code></td>
+                        </tr>
+                    `;
+                }
+
+                tableHtml += `
+                        </tbody>
+                    </table>
+                    <div class="history-count" style="margin-top: 0;">Showing ${history.length} transactions</div>
+                `;
+
+                this.elements.accountHistoryContent.innerHTML = tableHtml;
+            },
+
+            clearAccountHistory() {
+                this.elements.accountSearchInput.value = '';
+                this.elements.accountHistoryContainer.style.display = 'none';
+                this.elements.accountHistoryContent.innerHTML = `
+                    <div class="no-blocks">
+                        <p>Account history will appear here</p>
                     </div>
                 `;
             },
