@@ -232,8 +232,100 @@
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 17px;
-            table-layout: fixed;
+            font-size: 1.1em;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 0.9em 0.8em;
+            text-align: left;
+            border-bottom: 1px solid #001530;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .history-table th {
+            background: #001530;
+            color: #3EAFFF;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 2px solid #3EAFFF;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .history-table thead th:nth-child(1) { width: 20%; }
+        .history-table thead th:nth-child(2) { width: 30%; }
+        .history-table thead th:nth-child(3) { width: 10%; }
+        .history-table thead th:nth-child(4) { width: 20%; }
+        .history-table thead th:nth-child(5) { width: 20%; }
+
+        .history-table tbody td:nth-child(1) { width: 20%; }
+        .history-table tbody td:nth-child(2) { width: 30%; }
+        .history-table tbody td:nth-child(3) { width: 10%; }
+        .history-table tbody td:nth-child(4) { width: 20%; }
+        .history-table tbody td:nth-child(5) { width: 20%; }
+
+        .history-table tr:hover {
+            background: #002040;
+        }
+
+        .history-table .operation-cell {
+            font-weight: bold;
+            color: #3EAFFF;
+        }
+
+        .history-table .amount-cell {
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+        }
+
+        .history-table .from-to-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #aaa;
+        }
+
+        .history-table .block-cell {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .history-table .time-cell {
+            color: #888;
+            font-size: 0.9em;
+            white-space: nowrap;
+        }
+
+        .history-table .tx-id-cell {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #00ff88;
+        }
+
+        .history-table .account-name {
+            color: #3EAFFF;
+            font-weight: bold;
+        }
+
+        .history-table .account-id {
+            color: #aaa;
+        }
+
+        .history-table .account-ref {
+            font-size: 0.85em;
+            color: #888;
+        }
+
+        .history-table .asset-symbol {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .history-table .asset-id {
+            color: #888;
         }
 
         .history-table th,
@@ -786,16 +878,16 @@
             }
 
             .history-table {
-                font-size: 14px;
+                font-size: 0.95em;
             }
 
             .history-table th,
             .history-table td {
-                padding: 10px 8px;
+                padding: 0.8em 0.6em;
             }
 
             .history-table .tx-id-cell {
-                font-size: 10px;
+                font-size: 0.8em;
             }
 
             .search-btn {
@@ -995,16 +1087,16 @@
             }
 
             .history-table {
-                font-size: 15px;
+                font-size: 1em;
             }
 
             .history-table th,
             .history-table td {
-                padding: 12px 10px;
+                padding: 0.85em 0.7em;
             }
 
             .history-table .tx-id-cell {
-                font-size: 10px;
+                font-size: 0.85em;
             }
 
             .main-content {
@@ -1149,16 +1241,22 @@
             }
 
             .history-table {
-                font-size: 13px;
+                font-size: 0.9em;
             }
 
             .history-table th,
             .history-table td {
-                padding: 8px 6px;
+                padding: 0.7em 0.5em;
             }
 
             .history-table .tx-id-cell {
-                font-size: 9px;
+                font-size: 0.75em;
+            }
+
+            #accountHistoryContent .history-table {
+                width: calc(100% + 24px);
+                margin-left: -12px;
+                margin-right: -12px;
             }
 
             .account-info-card {
@@ -1166,7 +1264,15 @@
             }
 
             .account-info-card h3 {
-                font-size: 14px;
+                font-size: 1em;
+            }
+
+            .account-info-card .info-label {
+                font-size: 0.9em;
+            }
+
+            .account-info-card .info-value {
+                font-size: 0.9em;
             }
 
             .account-info-card .info-row {
@@ -1239,6 +1345,176 @@
 
             .result-content pre {
                 font-size: 10px;
+            }
+        }
+
+        /* Very Small Mobile (≤360px) */
+        @media (max-width: 360px) {
+            .container {
+                padding: 8px;
+            }
+
+            .logo h1 {
+                font-size: 14px;
+            }
+
+            .logo svg {
+                width: 35px;
+                height: 35px;
+            }
+
+            .status-indicator {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+
+            .status-dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .stats-bar {
+                gap: 6px;
+            }
+
+            .stat-card {
+                padding: 10px 6px;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .stat-card:first-child .stat-value {
+                font-size: 20px;
+            }
+
+            .stat-label {
+                font-size: 9px;
+            }
+
+            .search-section {
+                padding: 10px;
+            }
+
+            .search-section h2 {
+                font-size: 14px;
+            }
+
+            .search-input {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .search-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .account-search-section {
+                padding: 10px;
+            }
+
+            .account-history-container .panel {
+                min-height: 280px;
+            }
+
+            .history-table {
+                font-size: 0.8em;
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .history-table th,
+            .history-table td {
+                padding: 0.6em 0.5em;
+            }
+
+            .history-table .tx-id-cell {
+                font-size: 0.7em;
+            }
+
+            #accountHistoryContent .history-table {
+                width: calc(100% + 20px);
+                margin-left: -10px;
+                margin-right: -10px;
+            }
+
+            .panel {
+                min-height: 300px;
+            }
+
+            .panel-header {
+                padding: 8px 10px;
+            }
+
+            .panel-header h2 {
+                font-size: 13px;
+            }
+
+            .control-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .panel-content {
+                max-height: 280px;
+                padding: 10px;
+            }
+
+            .block-card {
+                padding: 10px;
+            }
+
+            .block-height {
+                font-size: 16px;
+            }
+
+            .block-timestamp {
+                font-size: 10px;
+            }
+
+            .detail-item {
+                padding: 6px;
+            }
+
+            .detail-label {
+                font-size: 9px;
+            }
+
+            .detail-value {
+                font-size: 11px;
+            }
+
+            .transaction {
+                padding: 6px;
+                font-size: 10px;
+            }
+
+            .result-card {
+                padding: 10px;
+            }
+
+            .result-content pre {
+                font-size: 9px;
+            }
+
+            .account-info-card {
+                padding: 10px;
+            }
+
+            .account-info-card h3 {
+                font-size: 0.9em;
+            }
+
+            .account-info-card .info-label {
+                font-size: 0.8em;
+            }
+
+            .account-info-card .info-value {
+                font-size: 0.8em;
             }
         }
 
@@ -2260,11 +2536,10 @@
 
                     this.renderAccountHistory(history, accountId);
                 } catch (err) {
-                    console.error('Account history search error:', err);
+                    console.error('Account history search error:', err.message);
                     this.elements.accountHistoryContent.innerHTML = `
                         <div class="history-empty">
-                            <p style="color: #ff4444;">Error: ${err.message}</p>
-                            <p style="font-size: 12px; margin-top: 10px;">Account "${username}" not found or history unavailable</p>
+                            <p>Account "${username}" not found or history unavailable</p>
                         </div>
                     `;
                 }
