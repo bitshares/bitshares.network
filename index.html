@@ -485,17 +485,565 @@
             color: #ff4444;
         }
 
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
+        /* Mobile Responsive - Large Phones (480px - 600px) */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 0;
+            }
+
+            .logo {
+                gap: 12px;
+            }
+
+            .logo svg {
+                width: 50px;
+                height: 50px;
+            }
+
+            .logo h1 {
+                font-size: 22px;
+            }
+
+            .status-indicator {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 15px;
+            }
+
+            .node-dropdown {
+                min-width: 100%;
+                width: 95%;
+                left: 2.5%;
+                transform: none;
+                max-height: 400px;
             }
 
             .stats-bar {
                 grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .stat-card {
+                padding: 15px 10px;
+            }
+
+            .stat-card:first-child .stat-value {
+                font-size: 28px;
+            }
+
+            .stat-value {
+                font-size: 22px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            .search-section {
+                padding: 15px;
+            }
+
+            .search-section h2 {
+                font-size: 18px;
+                margin-bottom: 12px;
             }
 
             .search-container {
                 flex-direction: column;
+                gap: 10px;
+            }
+
+            .search-input {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+
+            .search-btn {
+                padding: 12px 20px;
+                width: 100%;
+            }
+
+            .search-hints {
+                font-size: 12px;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .search-hints span {
+                margin-right: 0;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .panel {
+                min-height: 400px;
+            }
+
+            .panel-header {
+                padding: 12px 15px;
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            .panel-header h2 {
+                font-size: 16px;
+            }
+
+            .controls {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .control-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .panel-content {
+                max-height: 350px;
+                padding: 15px;
+            }
+
+            .block-card {
+                padding: 15px;
+            }
+
+            .block-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .block-height {
+                font-size: 20px;
+            }
+
+            .block-timestamp {
+                font-size: 12px;
+            }
+
+            .block-details {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .detail-item {
+                padding: 10px;
+            }
+
+            .detail-label {
+                font-size: 11px;
+            }
+
+            .detail-value {
+                font-size: 13px;
+            }
+
+            .transactions h4 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .transaction {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .result-card {
+                padding: 15px;
+            }
+
+            .result-type {
+                font-size: 11px;
+                padding: 3px 8px;
+            }
+
+            .result-id {
+                font-size: 12px;
+                margin-bottom: 8px;
+            }
+
+            .result-content {
+                font-size: 12px;
+            }
+
+            .result-content pre {
+                font-size: 11px;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
+            .no-blocks {
+                padding: 30px 15px;
+            }
+
+            .loading::after {
+                width: 16px;
+                height: 16px;
+            }
+        }
+
+        /* Tablet Responsive (600px - 900px) */
+        @media (min-width: 601px) and (max-width: 900px) {
+            .container {
+                max-width: 90%;
+                padding: 18px;
+            }
+
+            header {
+                padding: 18px 0;
+            }
+
+            .logo svg {
+                width: 55px;
+                height: 55px;
+            }
+
+            .logo h1 {
+                font-size: 24px;
+            }
+
+            .node-dropdown {
+                min-width: 450px;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 18px 12px;
+            }
+
+            .stat-value {
+                font-size: 24px;
+            }
+
+            .stat-card:first-child .stat-value {
+                font-size: 30px;
+            }
+
+            .search-section {
+                padding: 18px;
+            }
+
+            .search-container {
+                gap: 12px;
+            }
+
+            .search-input {
+                padding: 14px 18px;
+                font-size: 15px;
+            }
+
+            .search-btn {
+                padding: 14px 25px;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .panel {
+                min-height: 450px;
+            }
+
+            .panel-content {
+                max-height: 400px;
+            }
+
+            .block-card {
+                padding: 18px;
+            }
+
+            .block-height {
+                font-size: 22px;
+            }
+
+            .block-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .detail-item {
+                padding: 12px;
+            }
+        }
+
+        /* Small Mobile Responsive (320px - 480px) */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 98%;
+                padding: 10px;
+            }
+
+            header {
+                padding: 12px 0;
+                gap: 12px;
+            }
+
+            .logo {
+                gap: 10px;
+            }
+
+            .logo svg {
+                width: 45px;
+                height: 45px;
+            }
+
+            .logo h1 {
+                font-size: 18px;
+            }
+
+            .status-indicator {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .status-dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .node-dropdown {
+                min-width: 100%;
+                width: 98%;
+                left: 1%;
+                max-height: 350px;
+            }
+
+            .node-group {
+                padding: 10px;
+            }
+
+            .node-group-title {
+                font-size: 11px;
+            }
+
+            .node-item {
+                padding: 10px 12px;
+            }
+
+            .node-url {
+                font-size: 12px;
+            }
+
+            .node-details {
+                font-size: 10px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px 8px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .stat-card:first-child .stat-value {
+                font-size: 24px;
+            }
+
+            .stat-label {
+                font-size: 10px;
+            }
+
+            .search-section {
+                padding: 12px;
+            }
+
+            .search-section h2 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            .search-hints {
+                font-size: 10px;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .main-content {
+                gap: 12px;
+            }
+
+            .panel {
+                min-height: 350px;
+            }
+
+            .panel-header {
+                padding: 10px 12px;
+            }
+
+            .panel-header h2 {
+                font-size: 14px;
+            }
+
+            .controls {
+                width: 100%;
+            }
+
+            .control-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .panel-content {
+                max-height: 300px;
+                padding: 12px;
+            }
+
+            .block-card {
+                padding: 12px;
+            }
+
+            .block-height {
+                font-size: 18px;
+            }
+
+            .block-timestamp {
+                font-size: 11px;
+            }
+
+            .detail-item {
+                padding: 8px;
+            }
+
+            .detail-label {
+                font-size: 10px;
+            }
+
+            .detail-value {
+                font-size: 12px;
+            }
+
+            .transaction {
+                padding: 8px;
+                font-size: 11px;
+            }
+
+            .result-card {
+                padding: 12px;
+            }
+
+            .result-content pre {
+                font-size: 10px;
+            }
+        }
+
+        /* Landscape Mode Mobile */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .container {
+                padding: 10px;
+            }
+
+            .node-dropdown {
+                max-height: 200px;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .stat-card {
+                padding: 10px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .panel-content {
+                max-height: 250px;
+            }
+
+            .block-card {
+                padding: 10px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Desktop Large Screens */
+        @media (min-width: 1400px) {
+            .container {
+                max-width: 80%;
+            }
+
+            .stats-bar {
+                gap: 20px;
+            }
+
+            .stat-card {
+                padding: 25px;
+            }
+
+            .stat-value {
+                font-size: 32px;
+            }
+
+            .stat-card:first-child .stat-value {
+                font-size: 42px;
+            }
+
+            .panel-content {
+                max-height: 700px;
+            }
+
+            .block-card {
+                padding: 25px;
+            }
+
+            .block-height {
+                font-size: 28px;
+            }
+        }
+
+        /* Fix for very small screens */
+        @media (max-width: 360px) {
+            .logo h1 {
+                font-size: 16px;
+            }
+
+            .logo svg {
+                width: 40px;
+                height: 40px;
+            }
+
+            .status-indicator {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-value {
+                font-size: 16px;
+            }
+
+            .control-btn {
+                padding: 6px 10px;
+                font-size: 11px;
             }
         }
     </style>
