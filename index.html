@@ -48,6 +48,26 @@
             text-decoration: underline;
         }
 
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            color: #888;
+            font-size: 14px;
+            border-top: 1px solid #001530;
+        }
+
+        .footer a {
+            color: #3EAFFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            color: #00ff88;
+            text-decoration: underline;
+        }
+
         .container {
             max-width: 80%;
             margin: 0 auto;
@@ -542,13 +562,7 @@
             color: #888;
             margin-top: 0;
         }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
+        
         .panel {
             background: #001C3F;
             border-radius: 12px;
@@ -801,6 +815,22 @@
             color: #888;
         }
 
+        .search-results-container {
+            margin-bottom: 20px;
+        }
+
+        .search-results-container .panel {
+            min-height: 300px;
+        }
+
+        .live-blocks-container {
+            margin-bottom: 20px;
+        }
+
+        .live-blocks-container .panel {
+            min-height: 500px;
+        }
+
         .error-message {
             background: #3a1a1a;
             border: 1px solid #ff4444;
@@ -935,13 +965,14 @@
                 margin-right: 0;
             }
 
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 15px;
+            .search-results-container .panel,
+            .live-blocks-container .panel {
+                min-height: 350px;
             }
 
-            .panel {
-                min-height: 400px;
+            .search-results-container .panel-content,
+            .live-blocks-container .panel-content {
+                max-height: 350px;
             }
 
             .panel-header {
@@ -1128,16 +1159,13 @@
                 font-size: 0.85em;
             }
 
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 18px;
+            .search-results-container .panel,
+            .live-blocks-container .panel {
+                min-height: 400px;
             }
 
-            .panel {
-                min-height: 450px;
-            }
-
-            .panel-content {
+            .search-results-container .panel-content,
+            .live-blocks-container .panel-content {
                 max-height: 400px;
             }
 
@@ -1309,10 +1337,6 @@
                 gap: 3px;
             }
 
-            .main-content {
-                gap: 12px;
-            }
-
             .panel {
                 min-height: 350px;
             }
@@ -1334,7 +1358,13 @@
                 font-size: 12px;
             }
 
-            .panel-content {
+            .search-results-container .panel,
+            .live-blocks-container .panel {
+                min-height: 320px;
+            }
+
+            .search-results-container .panel-content,
+            .live-blocks-container .panel-content {
                 max-height: 300px;
                 padding: 12px;
             }
@@ -1471,8 +1501,9 @@
                 margin-right: -10px;
             }
 
-            .panel {
-                min-height: 300px;
+            .search-results-container .panel,
+            .live-blocks-container .panel {
+                min-height: 280px;
             }
 
             .panel-header {
@@ -1488,7 +1519,8 @@
                 font-size: 11px;
             }
 
-            .panel-content {
+            .search-results-container .panel-content,
+            .live-blocks-container .panel-content {
                 max-height: 280px;
                 padding: 10px;
             }
@@ -1681,6 +1713,36 @@
             </div>
         </div>
 
+        <div class="search-section">
+            <h2>Advance Search</h2>
+            <div class="search-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or object ID (e.g., 12345, bitsharesdex, 1.2.123)">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+            <div class="search-hints">
+                <span><strong>Blocks:</strong> Enter block number (e.g., 12345)</span>
+                <span><strong>Accounts:</strong> Enter username (e.g., bitsharesdex)</span>
+                <span><strong>Objects:</strong> Enter object ID (e.g., 1.2.123 or hex)</span>
+            </div>
+        </div>
+
+        <div class="search-results-container" id="searchResultsContainer" style="display: none;">
+            <div class="panel">
+                <div class="panel-header">
+                    <h2>Search Results</h2>
+                    <div class="controls">
+                        <button class="control-btn secondary" id="copyResultsBtn" onclick="App.copyResultsJson()">Copy JSON</button>
+                        <button class="control-btn secondary" id="clearResultsBtn">Clear Results</button>
+                    </div>
+                </div>
+                <div class="panel-content" id="resultsContainer">
+                    <div class="no-blocks">
+                        <p>Search for blocks, accounts, or objects</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="search-section account-search-section">
             <h2>Account Statement Search</h2>
             <div class="search-container">
@@ -1709,20 +1771,7 @@
             </div>
         </div>
 
-        <div class="search-section">
-            <h2>Advance Search</h2>
-            <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or object ID (e.g., 12345, bitsharesdex, 1.2.123)">
-                <button class="search-btn" id="searchBtn">Search</button>
-            </div>
-            <div class="search-hints">
-                <span><strong>Blocks:</strong> Enter block number (e.g., 12345)</span>
-                <span><strong>Accounts:</strong> Enter username (e.g., bitsharesdex)</span>
-                <span><strong>Objects:</strong> Enter object ID (e.g., 1.2.123 or hex)</span>
-            </div>
-        </div>
-
-        <div class="main-content">
+        <div class="live-blocks-container">
             <div class="panel">
                 <div class="panel-header">
                     <h2>Live Blocks</h2>
@@ -1735,18 +1784,6 @@
                     <div class="no-blocks">
                         <p>Waiting for blocks...</p>
                         <p style="font-size: 14px; margin-top: 10px;">Connect to see real-time block data</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel">
-                <div class="panel-header">
-                    <h2>Search Results</h2>
-                    <button class="control-btn secondary" id="clearResultsBtn">Clear Results</button>
-                </div>
-                <div class="panel-content" id="resultsContainer">
-                    <div class="no-blocks">
-                        <p>Search for blocks, accounts, or objects</p>
                     </div>
                 </div>
             </div>
@@ -1888,6 +1925,7 @@
                 statusText: document.getElementById('statusText'),
                 blocksContainer: document.getElementById('blocksContainer'),
                 resultsContainer: document.getElementById('resultsContainer'),
+                searchResultsContainer: document.getElementById('searchResultsContainer'),
                 currentBlock: document.getElementById('currentBlock'),
                 blockCount: document.getElementById('blockCount'),
                 txCount: document.getElementById('txCount'),
@@ -1956,6 +1994,52 @@
                 setTimeout(() => {
                     tooltip.classList.remove('show');
                 }, 1500);
+            },
+
+            copyResultsJson() {
+                const resultsContainer = this.elements.resultsContainer;
+                const preElement = resultsContainer.querySelector('pre');
+                if (preElement) {
+                    const jsonText = preElement.textContent;
+                    navigator.clipboard.writeText(jsonText).then(() => {
+                        const btn = document.getElementById('copyResultsBtn');
+                        const originalText = btn.textContent;
+                        btn.textContent = 'Copied!';
+                        setTimeout(() => {
+                            btn.textContent = originalText;
+                        }, 1500);
+                    }).catch(err => {
+                        console.error('Failed to copy JSON:', err);
+                    });
+                }
+            },
+
+            async fetchAssetSymbol(assetId) {
+                if (this.assetSymbolCache[assetId]) return;
+                if (!assetId.startsWith('1.3.')) return;
+                
+                try {
+                    const result = await BitShares.db.get_objects([assetId]);
+                    if (result && result[0]) {
+                        const asset = result[0];
+                        this.assetSymbolCache[assetId] = {
+                            symbol: asset.symbol || assetId,
+                            precision: asset.precision !== undefined ? asset.precision : 5
+                        };
+                        console.log('Cached asset symbol:', assetId, this.assetSymbolCache[assetId]);
+                    }
+                } catch (err) {
+                    console.error('Error fetching asset symbol for', assetId, ':', err);
+                }
+            },
+
+            copyAssetSymbol(assetId, symbol, event) {
+                const url = window.location.origin + window.location.pathname + '#' + assetId;
+                navigator.clipboard.writeText(url).then(() => {
+                    this.showTooltip(event);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
             },
 
             getClickableAccount(id, name) {
@@ -2397,8 +2481,13 @@
             async getOperationPreview(opType, opData) {
                 const getAssetDisplay = (id) => {
                     if (!id) return id;
-                    if (this.assetSymbolCache[id]) {
-                        return `<span class="asset-symbol" title="${id}">${this.assetSymbolCache[id].symbol}</span>`;
+                    if (id.startsWith('1.3.')) {
+                        if (this.assetSymbolCache[id]) {
+                            return `<span class="asset-symbol clickable" onclick="App.copyAssetSymbol('${id}', '${this.assetSymbolCache[id].symbol}', event)" title="Click to copy link">${this.assetSymbolCache[id].symbol}</span>`;
+                        } else {
+                            this.fetchAssetSymbol(id);
+                            return `<span class="asset-id">${id}</span>`;
+                        }
                     }
                     return `<span class="asset-id">${id}</span>`;
                 };
@@ -2588,6 +2677,7 @@
             },
 
             clearResults() {
+                this.elements.searchResultsContainer.style.display = 'none';
                 this.elements.resultsContainer.innerHTML = `
                     <div class="no-blocks">
                         <p>Search for blocks, accounts, or objects</p>
@@ -2795,8 +2885,13 @@
 
                 const getAssetDisplay = (id) => {
                     if (!id) return id;
-                    if (this.assetSymbolCache[id]) {
-                        return App.getClickableObject(id);
+                    if (id.startsWith('1.3.')) {
+                        if (this.assetSymbolCache[id]) {
+                            return `<span class="asset-symbol clickable" onclick="App.copyAssetSymbol('${id}', '${this.assetSymbolCache[id].symbol}', event)" title="Click to copy link">${this.assetSymbolCache[id].symbol}</span>`;
+                        } else {
+                            App.fetchAssetSymbol(id);
+                            return App.getClickableObject(id);
+                        }
                     }
                     return App.getClickableObject(id);
                 };
@@ -2927,6 +3022,7 @@
                 if (!query) return;
 
                 this.updateSearchHash(query);
+                this.elements.searchResultsContainer.style.display = 'block';
                 this.elements.resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
 
                 try {
@@ -2994,5 +3090,8 @@
             App.init();
         });
     </script>
+    <footer class="footer">
+        Built with ❤️ for the BitShares Community by <a href="https://BitsharesGroup.org" target="_blank" rel="noopener">BitShares Group</a>
+    </footer>
 </body>
 </html>
