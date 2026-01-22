@@ -19,6 +19,35 @@
             min-height: 100vh;
         }
 
+        .copy-tooltip {
+            position: fixed;
+            background: #00ff88;
+            color: #001530;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 10000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .copy-tooltip.show {
+            opacity: 1;
+        }
+
+        .clickable {
+            cursor: pointer;
+            transition: color 0.2s, text-decoration 0.2s;
+        }
+
+        .clickable:hover {
+            color: #00ff88 !important;
+            text-decoration: underline;
+        }
+
         .container {
             max-width: 80%;
             margin: 0 auto;
@@ -1617,6 +1646,7 @@
     </style>
 </head>
 <body>
+    <div class="copy-tooltip" id="copyTooltip">Copied!</div>
     <div class="container">
         <header>
             <div class="logo">
@@ -1887,6 +1917,60 @@
                 this.renderNodeDropdown();
                 this.bindEvents();
                 this.connect();
+                this.handleHashSearch();
+            },
+
+            handleHashSearch() {
+                const hash = window.location.hash.slice(1);
+                if (hash) {
+                    console.log('Hash search detected:', hash);
+                    this.elements.searchInput.value = hash;
+                    setTimeout(() => this.handleSearch(), 2000);
+                }
+            },
+
+            updateSearchHash(query) {
+                if (query) {
+                    history.replaceState(null, null, '#' + query);
+                } else {
+                    history.replaceState(null, null, ' ');
+                }
+            },
+
+            copyToClipboard(text, event) {
+                const url = window.location.origin + window.location.pathname + '#' + text;
+                navigator.clipboard.writeText(url).then(() => {
+                    this.showTooltip(event);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                });
+            },
+
+            showTooltip(event) {
+                const tooltip = document.getElementById('copyTooltip');
+                const x = event ? event.clientX : window.innerWidth / 2 - 30;
+                const y = event ? event.clientY : window.innerHeight / 2;
+                tooltip.style.left = x + 'px';
+                tooltip.style.top = (y - 40) + 'px';
+                tooltip.classList.add('show');
+                setTimeout(() => {
+                    tooltip.classList.remove('show');
+                }, 1500);
+            },
+
+            getClickableAccount(id, name) {
+                if (!id) return id;
+                return `<span class="clickable" onclick="App.copyToClipboard('${name}', event)" title="Click to copy link">${name || id}</span>`;
+            },
+
+            getClickableObject(id) {
+                if (!id) return id;
+                return `<span class="clickable" onclick="App.copyToClipboard('${id}', event)" title="Click to copy link">${id}</span>`;
+            },
+
+            getClickableBlock(num) {
+                if (num === null || num === undefined) return 'N/A';
+                return `<span class="clickable" onclick="App.copyToClipboard('${num}', event)" title="Click to copy link">#${num}</span>`;
             },
 
             renderNodeDropdown() {
@@ -2393,6 +2477,8 @@
                     ? block.operationsList.join(', ')
                     : 'No operations';
 
+                const clickableWitnessId = this.getClickableObject(displayWitnessId);
+
                 const txHtml = block.transactions.map(tx => {
                     const opsHtml = tx.operations.map(op =>
                         `<div class="transaction"><span class="transaction-preview">${op}</span></div>`
@@ -2403,13 +2489,13 @@
                 const blockHtml = `
                     <div class="block-card ${isNew ? 'new' : ''}">
                         <div class="block-header">
-                            <span class="block-height">Block #${displayHeight !== null && displayHeight !== undefined ? displayHeight : 'N/A'}</span>
+                            <span class="block-height">Block ${this.getClickableBlock(displayHeight)}</span>
                             <span class="block-timestamp">${this.formatTimestamp(block.timestamp)}</span>
                         </div>
                         <div class="block-details">
                             <div class="detail-item">
                                 <div class="detail-label">Witness ID</div>
-                                <div class="detail-value">${displayWitnessId || 'N/A'}</div>
+                                <div class="detail-value">${clickableWitnessId}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Operations</div>
@@ -2546,12 +2632,14 @@
             },
 
             renderAccountInfo(account) {
+                const clickableName = this.getClickableAccount(account.id, account.name);
+                const clickableId = this.getClickableObject(account.id);
                 const accountInfoHtml = `
                     <div class="account-info-card">
-                        <h3>Account: ${account.name}</h3>
+                        <h3>Account: ${clickableName}</h3>
                         <div class="info-row">
                             <span class="info-label">Account ID</span>
-                            <span class="info-value">${account.id}</span>
+                            <span class="info-value">${clickableId}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Registrar</span>
@@ -2691,26 +2779,26 @@
                 const getAccountDisplay = async (id) => {
                     if (!id) return id;
                     if (this.accountNameCache[id]) {
-                        return `<span class="account-name" title="${id}">${this.accountNameCache[id]}</span>`;
+                        return App.getClickableAccount(id, this.accountNameCache[id]);
                     }
                     try {
                         const result = await BitShares.db.get_objects([id]);
                         if (result && result[0] && result[0].name) {
                             this.accountNameCache[id] = result[0].name;
-                            return `<span class="account-name" title="${id}">${result[0].name}</span>`;
+                            return App.getClickableAccount(id, result[0].name);
                         }
                     } catch (err) {
                         console.error('Error fetching account name for', id, ':', err);
                     }
-                    return `<span class="account-id">${id}</span>`;
+                    return App.getClickableAccount(id, null);
                 };
 
                 const getAssetDisplay = (id) => {
                     if (!id) return id;
                     if (this.assetSymbolCache[id]) {
-                        return `<span class="asset-symbol" title="${id}">${this.assetSymbolCache[id].symbol}</span>`;
+                        return App.getClickableObject(id);
                     }
-                    return `<span class="asset-id">${id}</span>`;
+                    return App.getClickableObject(id);
                 };
 
                 const getAssetPrecision = (id) => {
@@ -2808,9 +2896,9 @@
                         <tr class="${rowClass}">
                             <td class="operation-cell">${opName} ${virtualBadge}</td>
                             <td>${details}</td>
-                            <td class="block-cell">#${record.block_num}</td>
+                            <td class="block-cell">${this.getClickableBlock(record.block_num)}</td>
                             <td class="time-cell">${record.block_time ? new Date(record.block_time).toLocaleString() : 'N/A'}</td>
-                            <td class="tx-id-cell"><code>${record.id}</code></td>
+                            <td class="tx-id-cell"><code>${this.getClickableObject(record.id)}</code></td>
                         </tr>
                     `;
                 }
@@ -2838,6 +2926,7 @@
                 const query = this.elements.searchInput.value.trim();
                 if (!query) return;
 
+                this.updateSearchHash(query);
                 this.elements.resultsContainer.innerHTML = '<div class="loading">Searching...</div>';
 
                 try {
@@ -2864,10 +2953,11 @@
 
             renderSearchResult(data, resultType, query) {
                 if (!data) {
+                    const clickableQuery = this.getClickableObject(query);
                     this.elements.resultsContainer.innerHTML = `
                         <div class="result-card error">
                             <span class="result-type">${resultType}</span>
-                            <div class="result-id">${query}</div>
+                            <div class="result-id">${clickableQuery}</div>
                             <div class="result-content">No results found for "${query}"</div>
                         </div>
                     `;
@@ -2881,14 +2971,19 @@
 
                 const contentHtml = `<pre style="white-space: pre-wrap; word-wrap: break-word;">${JSON.stringify(displayData, null, 2)}</pre>`;
 
-                let title = query;
-                if (resultType === 'Block') title = `Block #${query}`;
-                if (resultType === 'Account') title = `Account: ${query}`;
+                let clickableTitle = query;
+                if (resultType === 'Block') {
+                    clickableTitle = `Block ${this.getClickableBlock(query)}`;
+                } else if (resultType === 'Account') {
+                    clickableTitle = `Account: ${this.getClickableAccount(query, query)}`;
+                } else {
+                    clickableTitle = this.getClickableObject(query);
+                }
 
                 this.elements.resultsContainer.innerHTML = `
                     <div class="result-card">
                         <span class="result-type">${resultType}</span>
-                        <div class="result-id">${title}</div>
+                        <div class="result-id">${clickableTitle}</div>
                         <div class="result-content">${contentHtml}</div>
                     </div>
                 `;
