@@ -1,37 +1,51 @@
 
 # BitShares Blockchain Explorer
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A real-time BitShares blockchain explorer built with vanilla JavaScript and the btsdex library.
-
-![BitShares Explorer](https://bitshares.github.io/docs/images/logo.png)
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Quick Start](#quick-start)
-- [Technical Architecture](#technical-architecture)
-  - [Dependencies](#dependencies)
-  - [Core Components](#core-components)
-  - [Code Structure](#code-structure)
-- [Node Configuration](#node-configuration)
-- [Contributing](#contributing)
-  - [Adding New Nodes](#adding-new-nodes)
-  - [Adding Operations](#adding-operations)
-  - [Modifying UI](#modifying-ui)
-- [Debugging](#debugging)
-- [Browser Compatibility](#browser-compatibility)
-- [License](#license)
-
----
-
-## Overview
-
-`index.html` is a single-page blockchain explorer application for the BitShares network. It connects to BitShares WebSocket nodes to display real-time block data, transaction operations, and provides search functionality for blocks, accounts, and objects.
+A real-time BitShares blockchain explorer built as a single-file web application. Connects directly to BitShares WebSocket nodes to display live blocks, search blocks/accounts/objects, and view account transaction history.
 
 ## Features
+
+### Live Block Streaming
+- Real-time block updates from BitShares WebSocket nodes
+- Displays block number, timestamp, witness, and operations
+- Pause/Resume controls for live updates
+- Automatic reconnection with polling fallback
+
+### Multi-Node Support
+- 13+ WebSocket nodes (Livenet + Testnet)
+- Node selector dropdown in status bar
+- Seamless switching with automatic reconnection
+
+### Advanced Search
+- **Block search**: Enter block number (e.g., `12345`)
+- **Account search**: Enter username (e.g., `bitsharesdex`)
+- **Object search**: Enter object ID (e.g., `1.2.123`, `1.11.1162425505`)
+- Hash-based deep linking: `https://bitshares.network/#1.11.1162425505`
+
+### Account Transaction History
+- View last 100 transactions for any account
+- Displays operation type, details, block number, timestamp, and transaction ID
+- Automatic resolution of account names and asset symbols
+- Clickable links to copy shareable URLs
+
+### Smart Data Resolution
+- **Account names**: Resolves `1.2.123` → `bitsharesdex`
+- **Asset symbols**: Resolves `1.3.0` → `BTS`, `1.3.113` → `USD`
+- **Amount precision**: Correctly displays amounts with proper precision (e.g., `10.00000 BTS`)
+
+### Shareable Links
+- Click any account name, object ID, or block number to copy a shareable URL
+- URL format: `https://bitshares.network/#query`
+- "Copy JSON" button for search results
+
+### Responsive Design
+- Desktop, tablet, and mobile optimized
+- Touch-friendly scrolling on small screens
+- Fluid typography using `em` units
+
+### Features
 
 - **Real-time Block Streaming** - Subscribe to new blocks via WebSocket
 - **Multiple Node Support** - Switch between 13+ BitShares nodes (Livenet and Testnet)
@@ -40,110 +54,86 @@ A real-time BitShares blockchain explorer built with vanilla JavaScript and the 
 - **Connection Management** - Automatic reconnection, timeout handling, and polling fallback
 - **Dark Theme UI** - Clean, responsive interface with stats dashboard
 
-## Quick Start
-
-1. Clone the repository.
-
-2. Open `index.html` in a web browser.
-
-3. The explorer will automatically connect to the default WebSocket node and start displaying blocks.
-
-## Technical Architecture
-
-### Dependencies
-
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| [btsdex.min.js](https://bitshares.network/btsdex.min.js) | Latest | BitShares JavaScript API library |
-
-### Core Components
-
-#### Connection Management
-
-```javascript
-// Connect to a WebSocket node
-await BitShares.connect(url)
-
-// Disconnect from current node
-await BitShares.disconnect()
-
-// Reconnect to a different node
-await BitShares.reconnect(url)
-```
-
-#### Block Subscription
-
-```javascript
-// Subscribe to new blocks
-BitShares.subscribe('block', (blockData) => {
-    // Process block data
-    console.log(blockData.head_block_number)
-    console.log(blockData.current_witness)
-})
-```
-
-#### Database Queries
-
-```javascript
-// Get dynamic global properties (head block number, etc.)
-const props = await BitShares.db.get_objects(['2.1.0'])
-
-// Get full block with transactions
-const block = await BitShares.db.get_block(blockNumber)
-
-// Search accounts by name
-const account = await BitShares.db.getAccountByName('username')
-```
-
 ### Code Structure
 
 ```text
 index.html
-├── HTML Structure
-│   ├── Header (Logo, Status Indicator, Node Dropdown)
-│   ├── Stats Bar (Current Block, Counts, Connection Time)
-│   ├── Search Section
-│   └── Main Content (Live Blocks & Search Results Panels)
-│
-├── CSS Styles
-│   ├── Dark theme colors (#001530, #001C3F, #3EAFFF)
-│   ├── Responsive grid layout
-│   └── Animated block cards
-│
-└── JavaScript (App Object)
-    ├── State Management
-    │   ├── currentNode
-    │   ├── blocks[]
-    │   ├── blockCount, txCount
-    │   └── isPaused
+├── <head>
+│   ├── Meta tags (viewport, charset)
+│   ├── Favicon
+│   └── CSS styles (inline, ~1500 lines)
+├── <body>
+│   ├── Header (logo, node selector)
+│   ├── Stats bar (current block, tx count, connection time)
+│   ├── Advance Search section
+│   ├── Search Results panel
+│   ├── Account Statement Search
+│   ├── Account History panel
+│   ├── Live Blocks panel
+│   └── Footer
+└── <script>
+    ├── App configuration
+    │   ├── nodes[] - WebSocket node list
+    │   ├── accountNameCache - Account ID to name mapping
+    │   └── assetSymbolCache - Asset ID to symbol/precision mapping
     │
-    ├── Core Methods
-    │   ├── init()
-    │   ├── connect()
-    │   ├── switchNode(url)
-    │   ├── handleNewBlock()
-    │   └── renderBlock()
+    ├── DOM elements - All UI element references
     │
-    └── Utility Methods
-        ├── handleSearch()
-        ├── getOperationName()
-        ├── updateHeadBlock()
-        └── togglePause()
+    ├── Initialization
+    │   ├── init() - App initialization
+    │   ├── bindEvents() - Event listeners
+    │   ├── connect() - WebSocket connection
+    │   └── handleHashSearch() - URL hash routing
+    │
+    ├── Node management
+    │   ├── renderNodeDropdown() - Node selector UI
+    │   ├── switchNode() - Node switching
+    │   └── toggleNodeDropdown() - Dropdown toggle
+    │
+    ├── Connection handling
+    │   ├── setStatus() - Connection status indicator
+    │   ├── updateHeadBlock() - Head block polling
+    │   ├── subscribeToBlocks() - Block subscription
+    │   └── startPolling() - Polling fallback
+    │
+    ├── Block streaming
+    │   ├── handleNewBlock() - Process new blocks
+    │   ├── renderBlock() - Render block UI
+    │   ├── getTransactionDetails() - Extract tx info
+    │   ├── getOperationName() - Operation type lookup
+    │   ├── getOperationPreview() - Operation preview
+    │   ├── formatAmount() - Amount formatting
+    │   └── cacheBlockAssets() - Asset metadata caching
+    │
+    ├── Search functionality
+    │   ├── handleSearch() - Main search handler
+    │   ├── renderSearchResult() - Display search results
+    │   └── updateSearchHash() - Update URL hash
+    │
+    ├── Account history
+    │   ├── handleAccountHistorySearch() - Account history fetch
+    │   ├── renderAccountInfo() - Account info card
+    │   ├── renderAccountHistory() - History table
+    │   ├── clearAccountHistory() - Clear history
+    │   ├── fetchAssetSymbol() - Asset metadata fetch
+    │   └── account/asset resolution helpers
+    │
+    ├── Click-to-copy functionality
+    │   ├── copyToClipboard() - Copy URL to clipboard
+    │   ├── copyResultsJson() - Copy JSON results
+    │   ├── copyAssetSymbol() - Copy asset link
+    │   └── showTooltip() - Show "Copied!" notification
+    │
+    └── UI helpers
+        ├── clearBlocks() - Clear blocks panel
+        ├── clearResults() - Clear search results
+        ├── togglePause() - Pause/resume streaming
+        ├── formatTimestamp() - Timestamp formatting
+        ├── updateConnectionTime() - Connection timer
+        ├── getClickableAccount() - Clickable account
+        ├── getClickableObject() - Clickable object
+        └── getClickableBlock() - Clickable block number
 ```
-
-### Key Functions Reference
-
-| Function | Purpose | Returns |
-|----------|---------|---------|
-| `init()` | Initialize app, load preferred node | void |
-| `connect()` | Connect to WebSocket node | Promise |
-| `switchNode(url)` | Switch WebSocket node (reloads page) | void |
-| `handleNewBlock(data)` | Process received block data | void |
-| `renderBlock(block)` | Render block card to UI | void |
-| `handleSearch()` | Unified search handler | void |
-| `startHeadBlockPolling()` | Poll for head block every second | void |
-
----
 
 ## Node Configuration
 
@@ -215,89 +205,14 @@ async getOperationName(opType) {
 }
 ```
 
-### Modifying UI
-
-#### Colors
-
-Modify CSS variables in the `<style>` section:
-
-```css
-:root {
-    --bg-primary: #001530;      /* Main background */
-    --bg-secondary: #001C3F;    /* Panels and cards */
-    --accent-color: #3EAFFF;    /* Highlights and logos */
-    --success-color: #00ff88;   /* Connected indicator */
-    --error-color: #ff4444;     /* Error indicator */
-}
-```
-
-#### Layout
-
-Adjust container width and panel layouts:
-
-```css
-.container {
-    max-width: 80%;  /* Main container width */
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.main-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;  /* Two-column layout */
-    gap: 20px;
-}
-```
-
-#### Panel Heights
-
-```css
-.panel-content {
-    max-height: 600px;  /* Scrollable panel height */
-    overflow-y: auto;
-}
-```
-
----
-
-## Debugging
-
-Enable console logging by opening browser DevTools (F12). Key log messages include:
-
-| Log Message | Description |
-|-------------|-------------|
-| `Block data received:` | Raw block data from subscription |
-| `Connecting to node:` | Current node URL being connected |
-| `Updated head block:` | Head block number fetched |
-| `Operations extracted:` | Parsed operation names from transactions |
-
-### Common Issues
-
-1. **Blocks not appearing**
-   - Check WebSocket connection status
-   - Try switching to a different node
-   - Check browser console for errors
-
-2. **Node switch not working**
-   - Node switching requires page reload (by design)
-   - Preferred node is stored in `sessionStorage`
-
-3. **Search not returning results**
-   - Ensure node is connected
-   - Check search format (numbers for blocks, names for accounts)
-
----
-
 ## Browser Compatibility
 
-| Browser | Version | Status |
-|---------|---------|--------|
-| Chrome | 80+ | ✅ Fully Supported |
-| Firefox | 75+ | ✅ Fully Supported |
-| Edge | 80+ | ✅ Fully Supported |
-| Safari | 13+ | ✅ Fully Supported |
-| Chrome Mobile | 80+ | ✅ Fully Supported |
-| Firefox Mobile | 68+ | ✅ Fully Supported |
+- Chrome	80+	Supported
+- Firefox	75+	Supported
+- Safari	13+	Supported
+- Edge	80+	Supported
+- Mobile Chrome	80+	Supported
+- Mobile Safari	13+	Supported
 
 **Requirements:**
 - Modern browser with WebSocket support
