@@ -1807,6 +1807,7 @@
             currentNode: 'wss://dex.iobanker.com/ws',
             accountNameCache: {},
             assetSymbolCache: {},
+            connected: false,
             nodes: [
                 {
                     name: 'Livenet',
@@ -1955,16 +1956,20 @@
                 this.renderNodeDropdown();
                 this.bindEvents();
                 this.connect();
-                this.handleHashSearch();
             },
 
             handleHashSearch() {
                 const hash = window.location.hash.slice(1);
-                if (hash) {
-                    console.log('Hash search detected:', hash);
-                    this.elements.searchInput.value = hash;
-                    setTimeout(() => this.handleSearch(), 2000);
+                if (!hash) return;
+                // Wait for connection before performing hash-based search
+                if (!this.connected) {
+                    setTimeout(() => this.handleHashSearch(), 500);
+                    return;
                 }
+                console.log('Hash search detected:', hash);
+                this.elements.searchInput.value = hash;
+                // Small delay before search to ensure input is ready
+                setTimeout(() => this.handleSearch(), 1000);
             },
 
             updateSearchHash(query) {
@@ -2185,11 +2190,14 @@
                         console.log('Connected successfully');
                         clearTimeout(this.connectionTimeout);
                         this.setStatus('connected');
+                        this.connected = true;
                         this.connectionStartTime = Date.now();
                         this.updateConnectionTime();
                         this.connectionTimeInterval = setInterval(() => this.updateConnectionTime(), 1000);
                         this.subscribeToBlocks();
                         this.startHeadBlockPolling();
+                        // Process any hash-based search after successful connection
+                        this.handleHashSearch();
                     }).catch(err => {
                         clearTimeout(this.connectionTimeout);
                         console.error('Connection error:', err);
