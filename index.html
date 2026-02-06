@@ -2435,7 +2435,7 @@
                     1: 'limit_order_create',
                     2: 'limit_order_cancel',
                     3: 'call_order_update',
-                    4: 'fill_order',
+                    4: 'fill_order',           // VIRTUAL
                     5: 'account_create',
                     6: 'account_update',
                     7: 'account_whitelist',
@@ -2470,17 +2470,45 @@
                     36: 'assert',
                     37: 'balance_claim',
                     38: 'override_transfer',
-                    39: 'blind_transfer',
-                    40: 'transfer_to_blind',
-                    41: 'blind_receipt',
-                    42: 'transfer_from_blind',
-                    43: 'asset_settle_cancel',
-                    44: 'asset_claim_fees',
-                    45: 'fba_distribute',
-                    46: 'bid_collateral',
-                    47: 'execute_bid',
-                    48: 'asset_claim_pool',
-                    49: 'asset_update_issuer'
+                    39: 'transfer_to_blind',
+                    40: 'blind_transfer',
+                    41: 'transfer_from_blind',
+                    42: 'asset_settle_cancel',  // VIRTUAL
+                    43: 'asset_claim_fees',
+                    44: 'fba_distribute',       // VIRTUAL
+                    45: 'bid_collateral',
+                    46: 'execute_bid',          // VIRTUAL
+                    47: 'asset_claim_pool',
+                    48: 'asset_update_issuer',
+                    49: 'htlc_create',
+                    50: 'htlc_redeem',
+                    51: 'htlc_redeemed',         // VIRTUAL
+                    52: 'htlc_extend',
+                    53: 'htlc_refund',           // VIRTUAL
+                    54: 'custom_authority_create',
+                    55: 'custom_authority_update',
+                    56: 'custom_authority_delete',
+                    57: 'ticket_create',
+                    58: 'ticket_update',
+                    59: 'liquidity_pool_create',
+                    60: 'liquidity_pool_delete',
+                    61: 'liquidity_pool_deposit',
+                    62: 'liquidity_pool_withdraw',
+                    63: 'liquidity_pool_exchange',
+                    64: 'samet_fund_create',
+                    65: 'samet_fund_delete',
+                    66: 'samet_fund_update',
+                    67: 'samet_fund_borrow',
+                    68: 'samet_fund_repay',
+                    69: 'credit_offer_create',
+                    70: 'credit_offer_delete',
+                    71: 'credit_offer_update',
+                    72: 'credit_offer_accept',
+                    73: 'credit_deal_repay',
+                    74: 'credit_deal_expired',   // VIRTUAL
+                    75: 'liquidity_pool_update',
+                    76: 'credit_deal_update',
+                    77: 'limit_order_update
                 };
 
                 return operationNames[opType] || `operation_${opType}`;
