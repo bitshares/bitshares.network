@@ -1716,13 +1716,13 @@
         <div class="search-section">
             <h2>Advance Search</h2>
             <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or object ID (e.g., 12345, bitsharesdex, 1.2.123)">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or asset symbol (e.g., 12345, bitsharesdex, BTS)">
                 <button class="search-btn" id="searchBtn">Search</button>
             </div>
             <div class="search-hints">
                 <span><strong>Blocks:</strong> Enter block number (e.g., 12345)</span>
                 <span><strong>Accounts:</strong> Enter username (e.g., bitsharesdex)</span>
-                <span><strong>Objects:</strong> Enter object ID (e.g., 1.2.123 or hex)</span>
+                <span><strong>Assets:</strong> Enter symbol in CAPS (e.g., BTS, USD)</span>
             </div>
         </div>
 
@@ -3093,13 +3093,23 @@
                     let result = null;
                     let resultType = '';
 
-                    if (!isNaN(query)) {
+                    // Check if it's an asset search (all uppercase, e.g., "BTS", "USD")
+                    if (query === query.toUpperCase() && query.match(/^[A-Z]+$/)) {
+                        resultType = 'Asset';
+                        result = await BitShares.assets[query];
+                    }
+                    // Check if it's a block number
+                    else if (!isNaN(query)) {
                         resultType = 'Block';
                         result = await BitShares.db.get_block(query);
-                    } else if (/^1\.2\.\d+$/.test(query) || /^1\.\d+\.\d+$/.test(query) || /^0x[0-9a-fA-F]+$/.test(query)) {
+                    }
+                    // Check if it's an object ID
+                    else if (/^1\.2\.\d+$/.test(query) || /^1\.\d+\.\d+$/.test(query) || /^0x[0-9a-fA-F]+$/.test(query)) {
                         resultType = 'Object';
                         result = await BitShares.db.get_objects([query]);
-                    } else {
+                    }
+                    // Default: search as account (lowercase or mixed case)
+                    else {
                         resultType = 'Account';
                         result = await BitShares.accounts[query];
                     }
