@@ -333,24 +333,24 @@
 
         .history-table .from-to-cell {
             font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            color: #aaa;
+            font-size: 1em;
+            color: #fff;
         }
 
         .history-table .block-cell {
-            color: #888;
-            font-size: 0.9em;
+            color: #fff;
+            font-size: 1em;
         }
 
         .history-table .time-cell {
-            color: #888;
-            font-size: 0.9em;
+            color: #fff;
+            font-size: 1em;
             white-space: nowrap;
         }
 
         .history-table .tx-id-cell {
             font-family: 'Courier New', monospace;
-            font-size: 0.85em;
+            font-size: 1em;
             color: #00ff88;
         }
 
@@ -375,123 +375,10 @@
 
         .history-table .asset-id {
             color: #888;
-        }
-
-        .history-table th,
-        .history-table td {
-            padding: 15px 12px;
-            text-align: left;
-            border-bottom: 1px solid #001530;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .history-table th {
-            background: #001530;
-            color: #3EAFFF;
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            border-bottom: 2px solid #3EAFFF;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        .history-table thead th:nth-child(1) { width: 20%; }
-        .history-table thead th:nth-child(2) { width: 30%; }
-        .history-table thead th:nth-child(3) { width: 10%; }
-        .history-table thead th:nth-child(4) { width: 20%; }
-        .history-table thead th:nth-child(5) { width: 20%; }
-
-        .history-table tbody td:nth-child(1) { width: 20%; }
-        .history-table tbody td:nth-child(2) { width: 30%; }
-        .history-table tbody td:nth-child(3) { width: 10%; }
-        .history-table tbody td:nth-child(4) { width: 20%; }
-        .history-table tbody td:nth-child(5) { width: 20%; }
-
-        .history-table tr:hover {
-            background: #002040;
-        }
-
-        .history-table .operation-cell {
-            font-weight: bold;
-            color: #3EAFFF;
-        }
-
-        .history-table .amount-cell {
-            font-family: 'Courier New', monospace;
-            color: #00ff88;
-        }
-
-        .history-table .from-to-cell {
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: #aaa;
-        }
-
-        .history-table .block-cell {
-            color: #888;
-            font-size: 15px;
-        }
-
-        .history-table .time-cell {
-            color: #888;
-            font-size: 15px;
-            white-space: nowrap;
-        }
-
-        .history-table .tx-id-cell {
-            font-family: 'Courier New', monospace;
-            font-size: 15px;
-            color: #00ff88;
-        }
-
-        .history-table .tx-id-cell {
-            font-family: 'Courier New', monospace;
-            font-size: 15px;
-            color: #00ff88;
-        }
-
-        .history-table .account-name {
-            color: #3EAFFF;
-            font-weight: bold;
-        }
-
-        .history-table .account-id {
-            color: #aaa;
-        }
-
-        .history-table .account-ref {
-            font-size: 14px;
-            color: #888;
-        }
-
-        .history-table .asset-symbol {
-            color: #00ff88;
-            font-weight: bold;
-        }
-
-        .history-table .asset-id {
-            color: #888;
-        }
-
-        .history-table .amount-cell {
-            font-family: 'Courier New', monospace;
-            color: #00ff88;
-            font-size: 15px;
         }
 
         .history-row-virtual {
             background: rgba(255, 68, 68, 0.1);
-        }
-
-        .history-row-account_update {
-            border-left: 3px solid #3EAFFF;
-        }
-
-        .history-row-account_create {
-            border-left: 3px solid #ffaa00;
         }
 
         .history-empty {
@@ -1716,7 +1603,7 @@
         <div class="search-section">
             <h2>Advance Search</h2>
             <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, or asset symbol (e.g., 12345, bitsharesdex, BTS)">
+                <input type="text" class="search-input" id="searchInput" placeholder="Enter block number, username, asset symbol, or object ID (e.g., 12345, bitsharesdex, BTS, 1.2.123)">
                 <button class="search-btn" id="searchBtn">Search</button>
             </div>
             <div class="search-hints">
@@ -1732,7 +1619,7 @@
                 <div class="panel-header">
                     <h2>Search Results</h2>
                     <div class="controls">
-                        <button class="control-btn secondary" id="copyResultsBtn" onclick="App.copyResultsJson()">Copy JSON</button>
+                        <button class="control-btn secondary" id="copyResultsBtn">Copy JSON</button>
                         <button class="control-btn secondary" id="clearResultsBtn">Clear Results</button>
                     </div>
                 </div>
@@ -1809,6 +1696,112 @@
             accountNameCache: {},
             assetSymbolCache: {},
             connected: false,
+            debug: true,
+            operationNames: {
+                0: 'transfer',
+                1: 'limit_order_create',
+                2: 'limit_order_cancel',
+                3: 'call_order_update',
+                4: 'fill_order',           // VIRTUAL
+                5: 'account_create',
+                6: 'account_update',
+                7: 'account_whitelist',
+                8: 'account_upgrade',
+                9: 'account_transfer',
+                10: 'asset_create',
+                11: 'asset_update',
+                12: 'asset_update_bitasset',
+                13: 'asset_update_feed_producers',
+                14: 'asset_issue',
+                15: 'asset_reserve',
+                16: 'asset_fund_fee_pool',
+                17: 'asset_settle',
+                18: 'asset_global_settle',
+                19: 'asset_publish_feed',
+                20: 'witness_create',
+                21: 'witness_update',
+                22: 'proposal_create',
+                23: 'proposal_update',
+                24: 'proposal_delete',
+                25: 'withdraw_permission_create',
+                26: 'withdraw_permission_update',
+                27: 'withdraw_permission_claim',
+                28: 'withdraw_permission_delete',
+                29: 'committee_member_create',
+                30: 'committee_member_update',
+                31: 'committee_member_update_global_parameters',
+                32: 'vesting_balance_create',
+                33: 'vesting_balance_withdraw',
+                34: 'worker_create',
+                35: 'custom',
+                36: 'assert',
+                37: 'balance_claim',
+                38: 'override_transfer',
+                39: 'transfer_to_blind',
+                40: 'blind_transfer',
+                41: 'transfer_from_blind',
+                42: 'asset_settle_cancel',  // VIRTUAL
+                43: 'asset_claim_fees',
+                44: 'fba_distribute',       // VIRTUAL
+                45: 'bid_collateral',
+                46: 'execute_bid',          // VIRTUAL
+                47: 'asset_claim_pool',
+                48: 'asset_update_issuer',
+                49: 'htlc_create',
+                50: 'htlc_redeem',
+                51: 'htlc_redeemed',         // VIRTUAL
+                52: 'htlc_extend',
+                53: 'htlc_refund',           // VIRTUAL
+                54: 'custom_authority_create',
+                55: 'custom_authority_update',
+                56: 'custom_authority_delete',
+                57: 'ticket_create',
+                58: 'ticket_update',
+                59: 'liquidity_pool_create',
+                60: 'liquidity_pool_delete',
+                61: 'liquidity_pool_deposit',
+                62: 'liquidity_pool_withdraw',
+                63: 'liquidity_pool_exchange',
+                64: 'samet_fund_create',
+                65: 'samet_fund_delete',
+                66: 'samet_fund_update',
+                67: 'samet_fund_borrow',
+                68: 'samet_fund_repay',
+                69: 'credit_offer_create',
+                70: 'credit_offer_delete',
+                71: 'credit_offer_update',
+                72: 'credit_offer_accept',
+                73: 'credit_deal_repay',
+                74: 'credit_deal_expired',   // VIRTUAL
+                75: 'liquidity_pool_update',
+                76: 'credit_deal_update',
+                77: 'credit_deal_cancel',
+                78: 'credit_fee_using_Collateral',
+                79: 'credit_offer_expired',
+                80: 'dex_settle_order',
+                81: 'limit_order_sync',
+                82: 'execute_bid_ext',
+                83: 'bond_create',
+                84: 'bond_delete',
+                85: 'bond_update',
+                86: 'bond_update_collateral',
+                87: 'bond_accept_offer',
+                88: 'bond_claim_collateral',
+                89: 'asset_claim_restricted',
+                90: 'asset_update_params',
+                91: 'fba_distribute_claim',
+                92: 'asset_settle_claim',
+                93: 'claim_all_incentive',
+                94: 'claim_incentive',
+                95: 'pool_exchange_incentive',
+                96: 'grouped_order_create',
+                97: 'grouped_order_update',
+                98: 'grouped_order_cancel',
+                99: 'grouped_order_execute',
+                100: 'invoke_blind_upload',
+                101: 'invoke_blind_sign',
+                102: 'invoke_blind_submit'
+            },
             nodes: [
                 {
                     name: 'Livenet',
@@ -1943,20 +1936,27 @@
                 accountSearchBtn: document.getElementById('accountSearchBtn'),
                 accountHistoryContainer: document.getElementById('accountHistoryContainer'),
                 accountHistoryContent: document.getElementById('accountHistoryContent'),
-                clearAccountHistoryBtn: document.getElementById('clearAccountHistoryBtn')
+                clearAccountHistoryBtn: document.getElementById('clearAccountHistoryBtn'),
+                copyTooltip: document.getElementById('copyTooltip'),
+                copyResultsBtn: document.getElementById('copyResultsBtn')
             },
 
             init() {
+                if (this.debug) console.log('Initializing app...');
                 const preferredNode = sessionStorage.getItem('preferredNode');
                 if (preferredNode) {
                     this.currentNode = preferredNode;
                     sessionStorage.removeItem('preferredNode');
-                    console.log('Using preferred node:', this.currentNode);
+                    if (this.debug) console.log('Using preferred node:', this.currentNode);
                 }
                 
                 this.renderNodeDropdown();
                 this.bindEvents();
                 this.connect();
+            },
+
+            log(...args) {
+                if (this.debug) console.log(...args);
             },
 
             handleHashSearch() {
@@ -1967,7 +1967,7 @@
                     setTimeout(() => this.handleHashSearch(), 500);
                     return;
                 }
-                console.log('Hash search detected:', hash);
+                this.log('Hash search detected:', hash);
                 this.elements.searchInput.value = hash;
                 // Small delay before search to ensure input is ready
                 setTimeout(() => this.handleSearch(), 1000);
@@ -1986,12 +1986,12 @@
                 navigator.clipboard.writeText(url).then(() => {
                     this.showTooltip(event);
                 }).catch(err => {
-                    console.error('Failed to copy:', err);
+                    this.log('Failed to copy:', err);
                 });
             },
 
             showTooltip(event) {
-                const tooltip = document.getElementById('copyTooltip');
+                const tooltip = this.elements.copyTooltip;
                 const x = event ? event.clientX : window.innerWidth / 2 - 30;
                 const y = event ? event.clientY : window.innerHeight / 2;
                 tooltip.style.left = x + 'px';
@@ -2003,19 +2003,18 @@
             },
 
             copyResultsJson() {
-                const resultsContainer = this.elements.resultsContainer;
-                const preElement = resultsContainer.querySelector('pre');
+                const preElement = this.elements.resultsContainer.querySelector('pre');
                 if (preElement) {
                     const jsonText = preElement.textContent;
                     navigator.clipboard.writeText(jsonText).then(() => {
-                        const btn = document.getElementById('copyResultsBtn');
+                        const btn = this.elements.copyResultsBtn;
                         const originalText = btn.textContent;
                         btn.textContent = 'Copied!';
                         setTimeout(() => {
                             btn.textContent = originalText;
                         }, 1500);
                     }).catch(err => {
-                        console.error('Failed to copy JSON:', err);
+                        this.log('Failed to copy JSON:', err);
                     });
                 }
             },
@@ -2032,10 +2031,10 @@
                             symbol: asset.symbol || assetId,
                             precision: asset.precision !== undefined ? asset.precision : 5
                         };
-                        console.log('Cached asset symbol:', assetId, this.assetSymbolCache[assetId]);
+                        this.log('Cached asset symbol:', assetId, this.assetSymbolCache[assetId]);
                     }
                 } catch (err) {
-                    console.error('Error fetching asset symbol for', assetId, ':', err);
+                    this.log('Error fetching asset symbol for', assetId, ':', err);
                 }
             },
 
@@ -2043,9 +2042,9 @@
                 const url = window.location.origin + window.location.pathname + '#' + assetId;
                 navigator.clipboard.writeText(url).then(() => {
                     this.showTooltip(event);
-                }).catch(err => {
-                    console.error('Failed to copy:', err);
-                });
+                    }).catch(err => {
+                        this.log('Failed to copy JSON:', err);
+                    });
             },
 
             getClickableAccount(id, name) {
@@ -2096,42 +2095,29 @@
                     return;
                 }
 
+                this.log('=== NODE SWITCH START ===');
+                this.log('From:', this.currentNode, 'to:', url);
                 this.hideNodeDropdown();
+                sessionStorage.setItem('preferredNode', url);
 
-                console.log('=== NODE SWITCH START ===');
-                console.log('From:', this.currentNode, 'to:', url);
-                this.setStatus('connecting');
-                this.elements.statusText.textContent = 'Switching node...';
-
-                try {
-                    console.log('Disconnecting from current node...');
-                    await BitShares.disconnect();
-                    
-                    console.log('Clearing state...');
-                    BitShares.connectPromise = undefined;
-                    BitShares.chain = undefined;
-                    BitShares.autoreconnect = false;
-                    
-                    this.currentNode = url;
-                    this.renderNodeDropdown();
-                    
-                    console.log('Page reload required for clean node switch...');
-                    this.elements.blocksContainer.innerHTML = `
-                        <div class="no-blocks">
-                            <p>Reloading to connect to ${url}...</p>
-                        </div>
-                    `;
-                    
-                    setTimeout(() => {
-                        sessionStorage.setItem('preferredNode', url);
-                        window.location.reload();
-                    }, 1000);
-                    
-                } catch (err) {
-                    console.error('Switch node error:', err);
-                    this.setStatus('error');
-                    this.elements.statusText.textContent = 'Connection Failed';
+                if (this.ws) {
+                    this.log('Disconnecting from current node...');
                 }
+
+                this.blocks = [];
+                this.blockCount = 0;
+                this.txCount = 0;
+                this.log('Clearing state...');
+
+                this.setStatus('connecting');
+                this.elements.blocksContainer.innerHTML = `
+                    <div class="no-blocks">
+                        <p style="color: #ffaa00;">Switching node. Reconnecting...</p>
+                    </div>
+                `;
+
+                this.log('Page reload required for clean node switch...');
+                window.location.reload();
             },
 
             bindEvents() {
@@ -2142,6 +2128,7 @@
                 this.elements.pauseBtn.addEventListener('click', () => this.togglePause());
                 this.elements.clearBtn.addEventListener('click', () => this.clearBlocks());
                 this.elements.clearResultsBtn.addEventListener('click', () => this.clearResults());
+                this.elements.copyResultsBtn.addEventListener('click', () => this.copyResultsJson());
                 this.elements.statusIndicator.addEventListener('click', (e) => {
                     e.stopPropagation();
                     this.toggleNodeDropdown();
@@ -2186,9 +2173,9 @@
                 }, 10000);
 
                 try {
-                    console.log('Connecting to node:', this.currentNode);
+                    this.log('Connecting to node:', this.currentNode);
                     BitShares.connect(this.currentNode).then(() => {
-                        console.log('Connected successfully');
+                        this.log('Connected successfully');
                         clearTimeout(this.connectionTimeout);
                         this.setStatus('connected');
                         this.connected = true;
@@ -2201,14 +2188,14 @@
                         this.handleHashSearch();
                     }).catch(err => {
                         clearTimeout(this.connectionTimeout);
-                        console.error('Connection error:', err);
+                        this.log('Connection error:', err);
                         this.setStatus('error');
                         this.elements.statusText.textContent = 'Connection Failed';
                         this.startPolling();
                     });
                 } catch (err) {
                     clearTimeout(this.connectionTimeout);
-                    console.error('Connection error:', err);
+                    this.log('Connection error:', err);
                     this.setStatus('error');
                     this.startPolling();
                 }
@@ -2224,31 +2211,31 @@
             },
 
             async updateHeadBlock() {
+                if (!BitShares) {
+                    this.log('BitShares not available');
+                    return;
+                }
+
+                if (!BitShares.db || !BitShares.db.get_objects) {
+                    this.log('BitShares.db.get_objects not available');
+                    return;
+                }
+
                 try {
-                    if (!BitShares) {
-                        console.log('BitShares not available');
-                        return;
-                    }
-                    
-                    if (!BitShares.db || !BitShares.db.get_objects) {
-                        console.log('BitShares.db.get_objects not available');
-                        return;
-                    }
-                    
-                    console.log('Fetching head block from', this.currentNode);
+                    this.log('Fetching head block from', this.currentNode);
                     const dynamicProps = await BitShares.db.get_objects(['2.1.0']);
-                    console.log('get_objects result:', dynamicProps);
-                    
+                    this.log('get_objects result:', dynamicProps);
+
                     if (dynamicProps && dynamicProps[0] && dynamicProps[0].head_block_number !== undefined) {
                         const num = parseInt(dynamicProps[0].head_block_number);
                         this.currentHeadBlockNum = num;
                         this.elements.currentBlock.textContent = num;
-                        console.log('Updated head block to:', num, 'from node:', this.currentNode);
+                        this.log('Updated head block to:', num, 'from node:', this.currentNode);
                     } else {
-                        console.log('No head_block_number in response');
+                        this.log('No head_block_number in response');
                     }
                 } catch (err) {
-                    console.error('Error fetching head block:', err);
+                    this.log('Error fetching head block:', err);
                 }
             },
 
@@ -2262,24 +2249,23 @@
 
                     if (subscribeResult && typeof subscribeResult.then === 'function') {
                         subscribeResult.then(() => {
-                            console.log('Successfully subscribed to blocks');
+                            this.log('Successfully subscribed to blocks');
                         }).catch(err => {
-                            console.error('Subscribe error:', err);
+                            this.log('Subscribe error:', err);
                             this.startPolling();
                         });
                     } else if (subscribeResult === undefined) {
-                        console.log('Subscribed to blocks (no Promise returned)');
+                        this.log('Subscribed to blocks (no Promise returned)');
                     } else {
-                        console.log('Subscribe returned:', subscribeResult);
+                        this.log('Subscribe returned:', subscribeResult);
                     }
                 } catch (err) {
-                    console.error('Subscribe error:', err);
-                    this.startPolling();
+                    this.log('Subscribe error:', err);
                 }
             },
 
             startPolling() {
-                console.log('Starting polling fallback...');
+                this.log('Starting polling fallback...');
                 this.pollInterval = setInterval(() => {
                     if (!this.isPaused) {
                         this.fetchLatestBlock();
@@ -2311,12 +2297,12 @@
                         }
                     }
                 } catch (err) {
-                    console.error('Polling error:', err);
+                    this.log('Error in fetchLatestBlock:', err);
                 }
             },
 
             async handleNewBlock(blockData) {
-                console.log('Block data received:', JSON.stringify(blockData, null, 2));
+                this.log('Block data received:', JSON.stringify(blockData, null, 2));
 
                 const data = Array.isArray(blockData) ? blockData[0] : blockData;
 
@@ -2367,10 +2353,10 @@
                             operationsList.push(...txOps);
                         }
                     }
-                    console.log('Operations extracted:', operationsList);
+                    this.log('Operations extracted:', operationsList);
                     this.cacheBlockAssets(fullBlock);
                 } catch (err) {
-                    console.error('Error fetching block operations:', err);
+                    this.log('Error fetching block operations:', err);
                 }
 
                 this.txCount += transactions.length;
@@ -2390,7 +2376,7 @@
                     this.blocks.pop();
                 }
 
-                this.renderBlock(block, true);
+                await this.renderBlock(block, true);
             },
 
             async getTransactionDetails(blockData) {
@@ -2431,88 +2417,24 @@
             },
 
             async getOperationName(opType) {
-                const operationNames = {
-                    0: 'transfer',
-                    1: 'limit_order_create',
-                    2: 'limit_order_cancel',
-                    3: 'call_order_update',
-                    4: 'fill_order',           // VIRTUAL
-                    5: 'account_create',
-                    6: 'account_update',
-                    7: 'account_whitelist',
-                    8: 'account_upgrade',
-                    9: 'account_transfer',
-                    10: 'asset_create',
-                    11: 'asset_update',
-                    12: 'asset_update_bitasset',
-                    13: 'asset_update_feed_producers',
-                    14: 'asset_issue',
-                    15: 'asset_reserve',
-                    16: 'asset_fund_fee_pool',
-                    17: 'asset_settle',
-                    18: 'asset_global_settle',
-                    19: 'asset_publish_feed',
-                    20: 'witness_create',
-                    21: 'witness_update',
-                    22: 'proposal_create',
-                    23: 'proposal_update',
-                    24: 'proposal_delete',
-                    25: 'withdraw_permission_create',
-                    26: 'withdraw_permission_update',
-                    27: 'withdraw_permission_claim',
-                    28: 'withdraw_permission_delete',
-                    29: 'committee_member_create',
-                    30: 'committee_member_update',
-                    31: 'committee_member_update_global_parameters',
-                    32: 'vesting_balance_create',
-                    33: 'vesting_balance_withdraw',
-                    34: 'worker_create',
-                    35: 'custom',
-                    36: 'assert',
-                    37: 'balance_claim',
-                    38: 'override_transfer',
-                    39: 'transfer_to_blind',
-                    40: 'blind_transfer',
-                    41: 'transfer_from_blind',
-                    42: 'asset_settle_cancel',  // VIRTUAL
-                    43: 'asset_claim_fees',
-                    44: 'fba_distribute',       // VIRTUAL
-                    45: 'bid_collateral',
-                    46: 'execute_bid',          // VIRTUAL
-                    47: 'asset_claim_pool',
-                    48: 'asset_update_issuer',
-                    49: 'htlc_create',
-                    50: 'htlc_redeem',
-                    51: 'htlc_redeemed',         // VIRTUAL
-                    52: 'htlc_extend',
-                    53: 'htlc_refund',           // VIRTUAL
-                    54: 'custom_authority_create',
-                    55: 'custom_authority_update',
-                    56: 'custom_authority_delete',
-                    57: 'ticket_create',
-                    58: 'ticket_update',
-                    59: 'liquidity_pool_create',
-                    60: 'liquidity_pool_delete',
-                    61: 'liquidity_pool_deposit',
-                    62: 'liquidity_pool_withdraw',
-                    63: 'liquidity_pool_exchange',
-                    64: 'samet_fund_create',
-                    65: 'samet_fund_delete',
-                    66: 'samet_fund_update',
-                    67: 'samet_fund_borrow',
-                    68: 'samet_fund_repay',
-                    69: 'credit_offer_create',
-                    70: 'credit_offer_delete',
-                    71: 'credit_offer_update',
-                    72: 'credit_offer_accept',
-                    73: 'credit_deal_repay',
-                    74: 'credit_deal_expired',   // VIRTUAL
-                    75: 'liquidity_pool_update',
-                    76: 'credit_deal_update',
-                    77: 'limit_order_update'
-                };
+                return this.operationNames[opType] || `operation_${opType}`;
+            },
 
-                return operationNames[opType] || `operation_${opType}`;
+            async getWitnessName(witnessId) {
+                if (!witnessId || witnessId === 'N/A') return 'N/A';
+                try {
+                    const witness = await BitShares.db.get_objects([witnessId]);
+                    if (witness && witness[0] && witness[0].witness_account) {
+                        const accountId = witness[0].witness_account;
+                        const account = await BitShares.db.get_objects([accountId]);
+                        if (account && account[0] && account[0].name) {
+                            return account[0].name;
+                        }
+                    }
+                } catch (err) {
+                    this.log('Error fetching witness name:', err);
+                }
+                return witnessId;
             },
 
             async getOperationPreview(opType, opData) {
@@ -2578,7 +2500,7 @@
                 return amount.toString();
             },
 
-            renderBlock(block, isNew = false) {
+            async renderBlock(block, isNew = false) {
                 if (this.blocks.length === 1) {
                     this.elements.blocksContainer.innerHTML = '';
                 }
@@ -2603,7 +2525,8 @@
                     ? block.operationsList.join(', ')
                     : 'No operations';
 
-                const clickableWitnessId = this.getClickableObject(displayWitnessId);
+                const witnessName = await this.getWitnessName(displayWitnessId);
+                const clickableWitness = this.getClickableAccount(displayWitnessId, witnessName);
 
                 const txHtml = block.transactions.map(tx => {
                     const opsHtml = tx.operations.map(op =>
@@ -2620,8 +2543,8 @@
                         </div>
                         <div class="block-details">
                             <div class="detail-item">
-                                <div class="detail-label">Witness ID</div>
-                                <div class="detail-value">${clickableWitnessId}</div>
+                                <div class="detail-label">Witness</div>
+                                <div class="detail-value">${clickableWitness}</div>
                             </div>
                             <div class="detail-item">
                                 <div class="detail-label">Operations</div>
@@ -2669,7 +2592,7 @@
                             }
                         }
                     } catch (err) {
-                        console.error('Error caching block assets:', err);
+                        this.log('Error caching block assets:', err);
                     }
                 }
             },
@@ -2730,14 +2653,14 @@
                 this.elements.accountHistoryContent.innerHTML = '<div class="history-loading">Searching account...</div>';
 
                 try {
-                    console.log('Searching for account:', username);
+                    this.log('Searching for account:', username);
                     
                     const account = await BitShares.db.getAccountByName(username);
                     if (!account) {
                         throw new Error('Account not found');
                     }
 
-                    console.log('Account found:', account);
+                    this.log('Account found:', account);
                     const accountId = account.id;
 
                     this.renderAccountInfo(account);
@@ -2745,11 +2668,11 @@
                     this.elements.accountHistoryContent.innerHTML = '<div class="history-loading">Loading account history...</div>';
 
                     const history = await BitShares.history.get_account_history(accountId, '1.11.0', 100, '1.11.0');
-                    console.log('History fetched:', history.length, 'records');
+                    this.log('History fetched:', history.length, 'records');
 
                     this.renderAccountHistory(history, accountId);
                 } catch (err) {
-                    console.error('Account history search error:', err.message);
+                    this.log('Account history search error:', err.message);
                     this.elements.accountHistoryContent.innerHTML = `
                         <div class="history-empty">
                             <p>Account "${username}" not found or history unavailable</p>
@@ -2795,87 +2718,6 @@
                     return;
                 }
 
-                const operationNames = {
-                    0: 'transfer',
-                    1: 'limit_order_create',
-                    2: 'limit_order_cancel',
-                    3: 'call_order_update',
-                    4: 'fill_order',           // VIRTUAL
-                    5: 'account_create',
-                    6: 'account_update',
-                    7: 'account_whitelist',
-                    8: 'account_upgrade',
-                    9: 'account_transfer',
-                    10: 'asset_create',
-                    11: 'asset_update',
-                    12: 'asset_update_bitasset',
-                    13: 'asset_update_feed_producers',
-                    14: 'asset_issue',
-                    15: 'asset_reserve',
-                    16: 'asset_fund_fee_pool',
-                    17: 'asset_settle',
-                    18: 'asset_global_settle',
-                    19: 'asset_publish_feed',
-                    20: 'witness_create',
-                    21: 'witness_update',
-                    22: 'proposal_create',
-                    23: 'proposal_update',
-                    24: 'proposal_delete',
-                    25: 'withdraw_permission_create',
-                    26: 'withdraw_permission_update',
-                    27: 'withdraw_permission_claim',
-                    28: 'withdraw_permission_delete',
-                    29: 'committee_member_create',
-                    30: 'committee_member_update',
-                    31: 'committee_member_update_global_parameters',
-                    32: 'vesting_balance_create',
-                    33: 'vesting_balance_withdraw',
-                    34: 'worker_create',
-                    35: 'custom',
-                    36: 'assert',
-                    37: 'balance_claim',
-                    38: 'override_transfer',
-                    39: 'transfer_to_blind',
-                    40: 'blind_transfer',
-                    41: 'transfer_from_blind',
-                    42: 'asset_settle_cancel',  // VIRTUAL
-                    43: 'asset_claim_fees',
-                    44: 'fba_distribute',       // VIRTUAL
-                    45: 'bid_collateral',
-                    46: 'execute_bid',          // VIRTUAL
-                    47: 'asset_claim_pool',
-                    48: 'asset_update_issuer',
-                    49: 'htlc_create',
-                    50: 'htlc_redeem',
-                    51: 'htlc_redeemed',         // VIRTUAL
-                    52: 'htlc_extend',
-                    53: 'htlc_refund',           // VIRTUAL
-                    54: 'custom_authority_create',
-                    55: 'custom_authority_update',
-                    56: 'custom_authority_delete',
-                    57: 'ticket_create',
-                    58: 'ticket_update',
-                    59: 'liquidity_pool_create',
-                    60: 'liquidity_pool_delete',
-                    61: 'liquidity_pool_deposit',
-                    62: 'liquidity_pool_withdraw',
-                    63: 'liquidity_pool_exchange',
-                    64: 'samet_fund_create',
-                    65: 'samet_fund_delete',
-                    66: 'samet_fund_update',
-                    67: 'samet_fund_borrow',
-                    68: 'samet_fund_repay',
-                    69: 'credit_offer_create',
-                    70: 'credit_offer_delete',
-                    71: 'credit_offer_update',
-                    72: 'credit_offer_accept',
-                    73: 'credit_deal_repay',
-                    74: 'credit_deal_expired',   // VIRTUAL
-                    75: 'liquidity_pool_update',
-                    76: 'credit_deal_update',
-                    77: 'limit_order_update'
-                };
-
                 const accountIds = new Set();
                 const assetIds = new Set();
                 for (const record of history) {
@@ -2897,7 +2739,7 @@
                     if (opData.asset_to_issue) assetIds.add(opData.asset_to_issue.asset_id);
                 }
 
-                console.log('Fetching names for', accountIds.size, 'accounts and', assetIds.size, 'assets');
+                    this.log('Fetching names for', accountIds.size, 'accounts and', assetIds.size, 'assets');
 
                 const accountIdArray = Array.from(accountIds);
                 if (accountIdArray.length > 0) {
@@ -2909,7 +2751,7 @@
                             }
                         }
                     } catch (err) {
-                        console.error('Error fetching account names:', err);
+                        this.log('Error fetching account names:', err);
                     }
                 }
 
@@ -2925,10 +2767,10 @@
                                 };
                             }
                         }
-                        console.log('Asset cache:', this.assetSymbolCache);
-                    } catch (err) {
-                        console.error('Error fetching asset symbols:', err);
-                    }
+                            this.log('Asset cache:', this.assetSymbolCache);
+                        } catch (err) {
+                            this.log('Error fetching asset symbols:', err);
+                        }
                 }
 
                 const getAccountDisplay = async (id) => {
@@ -2942,9 +2784,9 @@
                             this.accountNameCache[id] = result[0].name;
                             return App.getClickableAccount(id, result[0].name);
                         }
-                    } catch (err) {
-                        console.error('Error fetching account name for', id, ':', err);
-                    }
+                        } catch (err) {
+                            this.log('Error fetching account name for', id, ':', err);
+                        }
                     return App.getClickableAccount(id, null);
                 };
 
@@ -2995,7 +2837,7 @@
                 for (const record of history) {
                     const opType = record.op[0];
                     const opData = record.op[1];
-                    const opName = operationNames[opType] || `op_${opType}`;
+                    const opName = this.operationNames[opType] || `op_${opType}`;
                     
                     let details = '';
                     let rowClass = '';
@@ -3117,7 +2959,7 @@
 
                     this.renderSearchResult(result, resultType, query);
                 } catch (err) {
-                    console.error('Search error:', err);
+                    this.log('Search error:', err);
                     this.renderSearchResult(null, 'Error', query);
                 }
             },
