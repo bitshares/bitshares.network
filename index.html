@@ -2926,8 +2926,8 @@
                     let result = null;
                     let resultType = '';
 
-                    // Check if it's an asset search (all uppercase, e.g., "BTS", "USD")
-                    if (query === query.toUpperCase() && query.match(/^[A-Z]+$/)) {
+                    // Check if it's an asset search (uppercase with optional dots, e.g., "BTS", "USD", "IOB.XRP")
+                    if (query === query.toUpperCase() && query.match(/^[A-Z][A-Z0-9\.]{0,}$/)) {
                         resultType = 'Asset';
                         result = await BitShares.assets[query];
                     }
@@ -2936,8 +2936,8 @@
                         resultType = 'Block';
                         result = await BitShares.db.get_block(query);
                     }
-                    // Check if it's an object ID
-                    else if (/^1\.2\.\d+$/.test(query) || /^1\.\d+\.\d+$/.test(query) || /^0x[0-9a-fA-F]+$/.test(query)) {
+                    // Check if it's an object ID (only numeric with dots like 1.2.3, 1.3.0)
+                    else if (/^1\.\d+\.\d+$/.test(query)) {
                         resultType = 'Object';
                         result = await BitShares.db.get_objects([query]);
                     }
