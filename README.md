@@ -3,160 +3,127 @@
 
 # BitShares Blockchain Explorer
 
-A real-time, single-file BitShares blockchain explorer built with vanilla HTML, CSS, and JavaScript. Connect to BitShares WebSocket nodes to stream live blocks, search for accounts/assets/objects, and view account transaction history.
-
+A single-file, standalone BitShares Blockchain Explorer that runs directly in the browser without requiring any external dependencies or a backend server.
 
 ## Features
 
-- **Live Block Streaming**: Real-time blocks from BitShares WebSocket nodes
-- **Multi-Node Support**: 11+ livenet nodes and 3 testnet nodes with dropdown selector
-- **Advanced Search**: 
-  - Blocks (numeric): `12345`
-  - Accounts (lowercase): `bitsharesdex`
-  - Assets (uppercase): `BTS`, `USD`
-  - Objects (IDs): `1.2.123`, `1.3.0`, `1.6.188`
-- **Account Transaction History**: Last 100 transactions with resolved names/symbols
-- **Hash-Based Deep Linking**: Shareable URLs like `https://...#1.11.123456`
-- **Click-to-Copy**: All IDs, names, and blocks copy shareable URLs
-- **Responsive Design**: Mobile, tablet, and desktop support
-- **Dark Theme**: Professional dark blue color scheme
+- **Live Block Monitoring** - Real-time polling of the BitShares blockchain for new blocks
+- **Block History** - View recent blocks with transactions and operation details
+- **Advanced Search** - Search for blocks, accounts, assets, and objects by ID, name, or symbol
+- **Account History** - View transaction history for any account
+- **Multiple Nodes** - Connect to various BitShares public nodes
+- **Responsive Design** - Works on desktop, tablet, and mobile devices
+- **Dark Theme** - Modern dark UI optimized for readability
 
-## Quick Start
+## Running the Explorer
 
-### Prerequisites
+### Option 1: Direct File Opening
+Simply open `index.html` in a modern web browser. The explorer will connect to the default public node and start displaying blockchain data.
 
-- Modern web browser (Chrome, Firefox, Edge, Safari)
-- Internet connection (for WebSocket connection to BitShares nodes)
+### Option 2: Local Server (Recommended)
+For the best experience, run a local HTTP server:
 
-### Running the Explorer
+```bash
+# Python 3
+python -m http.server 8080
 
-1. Open `index.html` directly in your browser:
-   ```bash
-   # Windows
-   start index.html
-   
-   # macOS
-   open index.html
-   
-   # Linux
-   xdg-open index.html
-   ```
+# Node.js (if npx is available)
+npx serve .
 
-2. Or serve it with a local web server:
-   ```bash
-   # Python 3
-   python -m http.server 8000
-   
-   # Node.js (npx)
-   npx serve
-   
-   # PHP
-   php -S localhost:8000
-   ```
-
-3. Open `http://localhost:8000` in your browser
-
-## Code Structure
-
-```
-BitShares Explorer/
-├── index.html          # Main application (HTML + CSS + JavaScript)
-└── README.md           # This file
+# PHP
+php -S localhost:8080
 ```
 
-## Configuration Guide
+Then open `http://localhost:8080` in your browser.
 
-### Adding New Nodes
+## How It Works
 
-Edit the `nodes` array in `index.html`:
+The explorer uses direct WebSocket connections to BitShares blockchain nodes. It communicates using the Graphene API via JSON-RPC over WebSocket:
 
 ```javascript
-nodes: [
-    {
-        name: 'Livenet',
-        nodes: [
-            // Add new livenet node here
-            {
-                url: "wss://your-node-url.com/ws",
-                region: "Your Region",
-                country: "Your Country",
-                location: "City",
-                operator: "Witness: your-witness-name",
-                contact: "telegram: yourhandle"
-            }
-        ]
-    },
-    {
-        name: 'Testnet',
-        nodes: [
-            // Add new testnet node here
-        ]
-    }
-]
+ws.send(JSON.stringify({
+    jsonrpc: '2.0',
+    method: 'call',
+    params: ['database', 'get_block', [blockNum]],
+    id: 1
+}));
 ```
 
-**Node Properties:**
+### API Methods Used
 
-| Property | Required | Description |
-|----------|----------|-------------|
-| `url` | Yes | WebSocket endpoint |
-| `region` | No | Geographic region |
-| `country` | No | Country name |
-| `location` | No | City/data center |
-| `operator` | No | Witness or operator name |
-| `contact` | No | Contact information |
+- `get_objects` - Fetch blockchain objects (blocks, accounts, assets)
+- `get_block` - Fetch specific block data
+- `get_account_by_name` - Lookup account by username
+- `get_account_history` - Fetch account transaction history
+- `lookup_asset_symbols` - Find assets by symbol
 
-### Modifying Default Node
+## Search Examples
 
-Change the `currentNode` property:
+- **Block**: Enter a block number (e.g., `12345`)
+- **Account**: Enter an account name (e.g., `bitsharesdex`)
+- **Asset**: Enter asset symbol in CAPS (e.g., `BTS`, `USD`)
+- **Object**: Enter object ID (e.g., `1.2.123`, `1.3.0`)
 
-```javascript
-currentNode: 'wss://your-preferred-node.com/ws',
-```
+## Architecture
 
-### Adding New Operation Types
+- **Single File**: All HTML, CSS, and JavaScript in one file (~100KB)
+- **No Dependencies**: Pure vanilla JavaScript, no external libraries
+- **Direct WebSocket**: All blockchain communication via native WebSocket API
+- **Polling Mode**: Efficient 3-second polling interval for block updates
 
-Edit the `operationNames` object:
+## Public Nodes
 
-```javascript
-operationNames: {
-    0: 'transfer',
-    1: 'limit_order_create',
-    // Add new operation here
-    999: 'your_new_operation',  // Use next available ID
-    // ...
-}
-```
+The explorer connects to these public BitShares nodes by default:
 
-**Operation ID Reference:**
-- IDs 0-99: Core operations (transfers, orders, accounts, assets)
-- IDs 100+: Advanced operations (HTLC, liquidity pools, etc.)
+| Node | Region |
+|------|--------|
+| wss://dex.iobanker.com/ws | Germany (Frankfurt) |
+| wss://api.bitshares.dev/ws | USA (Virginia) |
+| wss://btsws.roelandp.nl/ws | Finland (Helsinki) |
+| wss://api.dex.trading/ws | France (Paris) |
+| wss://public.xbts.io/ws | Germany (Nuremberg) |
 
-### Debug Mode
+You can switch nodes by clicking the status indicator in the header.
 
-Enable debug logging by changing `debug`:
+## Files
 
-```javascript
-debug: true,  // Set to false to disable console logging
-```
-
-When enabled, logs are prefixed with `===` markers for easy filtering.
+- `index.html` - The complete application (HTML + CSS + JavaScript)
+- `README.md` - This documentation file
 
 ## Browser Compatibility
 
-| Browser | Version | Status |
-|---------|---------|--------|
-| Chrome | 90+ | ✓ Supported |
-| Firefox | 88+ | ✓ Supported |
-| Edge | 90+ | ✓ Supported |
-| Safari | 14+ | ✓ Supported |
-| Chrome Mobile | 90+ | ✓ Supported |
-| Firefox Mobile | 88+ | ✓ Supported |
+Tested and working in:
+- Firefox (recommended)
+- Chrome
+- Edge
+- Safari
+
+## Known Limitations
+
+1. **Polling vs WebSocket**: The explorer uses polling instead of WebSocket subscriptions for better reliability across different network conditions
+2. **Rate Limiting**: Excessive API calls may trigger rate limits on public nodes
+3. **Historical Data**: Some older blocks may not be available on all nodes
+
+## Troubleshooting
+
+### Blocks not loading
+- Check your internet connection
+- Try switching to a different node
+- Wait a few moments and refresh
+
+### Account search not working
+- Ensure the account name is spelled correctly
+- Account names are case-sensitive (lowercase)
+- Some accounts may not exist on all nodes
+
+### Witness names not showing
+- Witness name resolution can be slow due to additional API calls
+- Names are cached after first lookup
 
 ## License
 
-This project is open source and available for contributions from the BitShares community.
+This project is open source and available for community use and improvement.
 
 ---
 
-**Built with ❤️ for the BitShares Community**
+Built for the BitShares Community
